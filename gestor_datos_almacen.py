@@ -41,6 +41,9 @@ class Conexion:
                 stock = 10
             ))
 
+
+    def insertar_neumatica(self):
+        
         self.neumatica.insert(
             dict(
                 codigo = 'B0001',

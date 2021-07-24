@@ -32,6 +32,16 @@ def get_neumatica():
     conexion = Conexion()
     return conexion.mostrar_neumatica()
 
+@almacen.post("/electricidad")
+def post_electricidad():
+    conexion = Conexion()
+    return conexion.insertar_electricidad()
+
+@almacen.post("/neumatica")
+def post_neumatica():
+    conexion = Conexion()
+    return conexion.insertar_neumatica()
+
 
 
 if __name__ == "__main__":  # si el nombre del script que se esta ejecutando es main realiza lo siguiente
