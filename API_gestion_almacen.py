@@ -13,16 +13,13 @@ class Datos(BaseModel):         #crear clase para realizar el post de volatil co
     categoria: str  
     modelo: str
     stock: int
-
-    
-    
-    
+  
 
 almacen = FastAPI() #creamos aplicacion FASTAPI
 
 conexion = Conexion()
 
-@almacen.get("/elctricidad")  
+@almacen.get("/electricidad")  
 def get_electricidad():
     conexion = Conexion()
     return conexion.mostrar_electricidad()
