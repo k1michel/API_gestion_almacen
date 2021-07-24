@@ -12,7 +12,7 @@ class Conexion:
         self.db = dataset.connect(
             f'sqlite:///{Conexion.fichero_sqlite}?check_same_thread=False')  # sirve para que varios procesos simultaneos se puedan ejecutar sin que salte warning
         # creamos instancia q mediante dataset la conectamos con nuestro fichero de la base de datos
-        self.electricidad = self.db['electricidad']  # variable que alberga dentro de la instancia de la bd la lista
+        self.electricidad = self.db['electricidad']  
         self.neumatica = self.db['neumatica'] 
          
     def insertar_electricidad(self):

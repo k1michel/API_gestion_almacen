@@ -1,6 +1,6 @@
-from typing import Optional    #libreria que usa FastApi
+from typing import Optional   
 from fastapi import FastAPI
-from pydantic import BaseModel  #modelo estrictamente tipado para heredar su clase
+from pydantic import BaseModel  
 from datetime import datetime
 from threading import Thread
 from time import sleep
@@ -8,14 +8,14 @@ import uvicorn
 from gestor_datos_almacen import Conexion
 
 
-class Datos(BaseModel):         #crear clase para realizar el post de volatil con estructura basemodel
-    codigo: str                     #basemodel tiene init
+class Datos(BaseModel):         
+    codigo: str                     
     categoria: str  
     modelo: str
     stock: int
   
 
-almacen = FastAPI() #creamos aplicacion FASTAPI
+almacen = FastAPI() 
 
 conexion = Conexion()
 
