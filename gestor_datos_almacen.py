@@ -64,3 +64,10 @@ class Conexion:
                 modelo = 'recto d8-union',
                 stock = 21
             ))
+
+
+    def mostrar_electricidad(self):
+        return [dict(electricidad) for electricidad in self.electricidad.all()]
+
+    def mostrar_neumatica(self):
+        return [dict(neumatica) for neumatica in self.neumatica.all()]
