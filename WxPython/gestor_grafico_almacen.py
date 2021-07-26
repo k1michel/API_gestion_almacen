@@ -14,7 +14,8 @@ class interfaz(wx.Frame):
 
         self.pnl = wx.Panel(self)
         self.categoria_sel = str
-        self.busqueda_enter = str
+        self.busqueda_codigo = str
+        self.envio = dict
         ## VENTANA ##
         self.SetSize((1080, 720))       
         self.SetTitle('GESTION ALMACEN by Michel Alvarez')  
@@ -155,11 +156,11 @@ class interfaz(wx.Frame):
     
     def OnSelect(self,event):
         self.categoria_sel = self.cbbox_categoria.GetValue()
-        self.enviar(True)
+        self.enviar(True)        
+
     def OnEnterPressedBuscar(self,event):
-        self.busqueda_codigo = self.ctrl_buscar_codigo.GetValue()
-        self.enviar(True)
-    
+        self.busqueda = self.ctrl_buscar.GetValue() 
+        print(f'Se ha buscado {self.busqueda}')
     
     def enviar(self,e):
         self.envio = dict(
@@ -169,6 +170,10 @@ class interfaz(wx.Frame):
 
     def OnEnterPressedCodigo(self,event):
         print('Se ha introducido codigo para buscar')
+        self.busqueda_codigo = self.ctrl_buscar_codigo.GetValue()
+        self.enviar(True)
+        print(f'Busqueda codigo -> {self.busqueda_codigo}\n')
+        print(f'Envio -> {self.envio}')
 
     def OnClickedModificar(self,event):
         print('Se ha pulsado boton Modificar')
