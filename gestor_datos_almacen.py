@@ -74,3 +74,11 @@ class Conexion:
 
     def mostrar_neumatica(self):
         return [dict(neumatica) for neumatica in self.neumatica.all()]
+    
+    def eliminar_electricidad(self):
+        self.electricidad.delete()
+        return 'Borrado de electricidad OK'
+    
+    def eliminar_neumatica(self):
+        self.neumatica.delete()
+        return 'Borrado de neumatica OK'

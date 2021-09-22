@@ -53,7 +53,7 @@ class interfaz(wx.Frame):
         self.Bind(wx.EVT_COMBOBOX, self.OnSelect)
         self.sizer.Add(self.cbbox_categoria, pos=(12, 1),span=wx.DefaultSpan, flag=wx.ALIGN_CENTER)
 
-        self.ctrl_resultado = wx.TextCtrl(self.pnl,size=(200,500),style = wx.TE_MULTILINE)
+        self.ctrl_resultado = wx.TextCtrl(self.pnl,size=(200,1000),style = wx.TE_MULTILINE)
         self.sizer.Add(self.ctrl_resultado, pos=(14, 1), flag=wx.ALIGN_CENTRE)
         
 

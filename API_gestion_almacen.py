@@ -39,8 +39,18 @@ def post_neumatica():
     conexion = Conexion()
     return conexion.insertar_neumatica()
 
+@almacen.delete("/electricidad")
+def delete_electricidad():
+    conexion = Conexion()
+    return conexion.eliminar_electricidad()
+
+@almacen.delete("/neumatica")
+def delete_neumatica():
+    conexion = Conexion()
+    return conexion.eliminar_neumatica()
+
 
 
 if __name__ == "__main__":  # si el nombre del script que se esta ejecutando es main realiza lo siguiente
     
-    uvicorn.run(almacen, host="0.0.0.0", port=8080)
+    uvicorn.run(almacen, host="0.0.0.0", port=8000)
