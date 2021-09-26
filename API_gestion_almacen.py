@@ -13,11 +13,35 @@ class Datos(BaseModel):
     categoria: str  
     modelo: str
     stock: int
-  
+    fecha: str
+
+class Paquete(BaseModel):         
+    cat: str                     
+    busc: str 
 
 almacen = FastAPI() 
 
 conexion = Conexion()
+
+@almacen.post("/envios")
+def post_envios(paquete : Paquete):
+    conexion = Conexion()
+    dic_paquete= dict(
+        cat=paquete.cat,
+        busc=paquete.busc,
+    )
+    conexion.insertar_envios(dic_paquete)
+    return 'Paquete recibido en Envios'
+
+@almacen.get("/envios")
+def get_envios():
+    conexion = Conexion()
+    return conexion.mostrar_envios()
+
+@almacen.delete("/envios")
+def delete_envios():
+    conexion = Conexion()
+    return conexion.eliminar_envios()
 
 @almacen.get("/electricidad")  
 def get_electricidad():
@@ -48,6 +72,7 @@ def delete_electricidad():
 def delete_neumatica():
     conexion = Conexion()
     return conexion.eliminar_neumatica()
+
 
 
 

@@ -1,4 +1,8 @@
 import wx
+import requests
+import json
+
+
 
 
 class interfaz(wx.Frame):
@@ -16,6 +20,7 @@ class interfaz(wx.Frame):
         self.categoria_sel = str
         self.busqueda_codigo = str
         self.envio = dict
+        self.ip_server = 'http://0.0.0.0:8000/'
         ## VENTANA ##       
         self.SetSize(1080,720)
         self.SetTitle('GESTION ALMACEN by Michel Alvarez')  
@@ -156,13 +161,16 @@ class interfaz(wx.Frame):
     def OnEnterPressedBuscar(self,event):
         self.busqueda = self.ctrl_buscar.GetValue() 
         print(f'Se ha buscado {self.busqueda}')
-    
-    def enviar(self,e):
-        self.envio = dict(
-            cat= self.categoria_sel,
-            busc= self.busqueda_codigo
-            )
 
+    def enviar(self,e):
+        envio = {
+            'cat': self.categoria_sel,
+            'busc': self.busqueda_codigo
+        }
+        data_envio = json.dumps(envio)
+        json_data = {"dic_data":data_envio}
+        self.respuesta_envio = requests.post('http://0.0.0.0:8000/envios', data=json_data)
+        
     def OnEnterPressedCodigo(self,event):
         print('Se ha introducido codigo para buscar')
         self.busqueda_codigo = self.ctrl_buscar_codigo.GetValue()
