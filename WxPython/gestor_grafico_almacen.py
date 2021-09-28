@@ -3,8 +3,6 @@ import requests
 import json
 
 
-
-
 class interfaz(wx.Frame):
 
     def __init__(self, *args, **kw):
@@ -21,6 +19,7 @@ class interfaz(wx.Frame):
         self.busqueda_codigo = str
         self.envio = dict
         self.ip_server = 'http://0.0.0.0:8000/'
+        
         ## VENTANA ##       
         self.SetSize(1080,720)
         self.SetTitle('GESTION ALMACEN by Michel Alvarez')  
@@ -163,13 +162,11 @@ class interfaz(wx.Frame):
         print(f'Se ha buscado {self.busqueda}')
 
     def enviar(self,e):
-        envio = {
+        self.envio = {
             'cat': self.categoria_sel,
-            'busc': self.busqueda_codigo
+            'busc':self.busqueda_codigo
         }
-        data_envio = json.dumps(envio)
-        json_data = {"dic_data":data_envio}
-        self.respuesta_envio = requests.post('http://0.0.0.0:8000/envios', data=json_data)
+        self.respuesta_envio = requests.post('http://0.0.0.0:8000/envios', data=json.dumps(self.envio))
         
     def OnEnterPressedCodigo(self,event):
         print('Se ha introducido codigo para buscar')
