@@ -31,7 +31,7 @@ def post_envios(paquete : Paquete):
         busc=paquete.busc,
     )
     conexion.insertar_envios(dic_paquete)
-    return 'Paquete recibido en Envios'
+    return 'Paquete recibido en Envios OK'
 
 @almacen.get("/envios")
 def get_envios():
@@ -41,7 +41,8 @@ def get_envios():
 @almacen.delete("/envios")
 def delete_envios():
     conexion = Conexion()
-    return conexion.eliminar_envios()
+    conexion.eliminar_envios()
+    return 'Eliminado completo Envios OK'
 
 @almacen.get("/electricidad")  
 def get_electricidad():
@@ -56,22 +57,26 @@ def get_neumatica():
 @almacen.post("/electricidad")
 def post_electricidad():
     conexion = Conexion()
-    return conexion.insertar_electricidad()
+    conexion.insertar_electricidad()
+    return 'Insertados en Electricidad OK'
 
 @almacen.post("/neumatica")
 def post_neumatica():
     conexion = Conexion()
-    return conexion.insertar_neumatica()
+    conexion.insertar_neumatica()
+    return 'Insertados en Neumatica OK'
 
 @almacen.delete("/electricidad")
 def delete_electricidad():
     conexion = Conexion()
-    return conexion.eliminar_electricidad()
+    conexion.eliminar_electricidad()
+    return 'Eliminado completo Electricidad OK'
 
 @almacen.delete("/neumatica")
 def delete_neumatica():
     conexion = Conexion()
-    return conexion.eliminar_neumatica()
+    conexion.eliminar_neumatica()
+    return 'Eliminado completo Neumatica OK'
 
 
 

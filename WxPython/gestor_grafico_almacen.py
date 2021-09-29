@@ -4,7 +4,9 @@ import json
 
 
 class interfaz(wx.Frame):
-
+    categoria_sel : str = 'vacio'
+    busqueda_codigo : str = 'vacio'
+    
     def __init__(self, *args, **kw):
         super(interfaz, self).__init__(*args, **kw)
     
@@ -15,9 +17,7 @@ class interfaz(wx.Frame):
     def InitUI(self):
 
         self.pnl = wx.Panel(self)
-        self.categoria_sel = str
-        self.busqueda_codigo = str
-        self.envio = dict
+        
         self.ip_server = 'http://0.0.0.0:8000/'
         
         ## VENTANA ##       
@@ -162,18 +162,25 @@ class interfaz(wx.Frame):
         print(f'Se ha buscado {self.busqueda}')
 
     def enviar(self,e):
-        self.envio = {
-            'cat': self.categoria_sel,
-            'busc':self.busqueda_codigo
+        envio = {
+            "cat": self.categoria_sel,
+            "busc":self.busqueda_codigo
         }
-        self.respuesta_envio = requests.post('http://0.0.0.0:8000/envios', data=json.dumps(self.envio))
+        respuesta_envio = requests.post('http://0.0.0.0:8000/envios', data=json.dumps(envio))
+        print(f'Respuesta del requests -> {respuesta_envio.json()}')
+        print(f'Envio -> {envio}')
+        self.categoria_sel = 'vacio'
+        self.busqueda_codigo = 'vacio'
+        
+        
         
     def OnEnterPressedCodigo(self,event):
         print('Se ha introducido codigo para buscar')
         self.busqueda_codigo = self.ctrl_buscar_codigo.GetValue()
-        self.enviar(True)
         print(f'Busqueda codigo -> {self.busqueda_codigo}\n')
-        print(f'Envio -> {self.envio}')
+        self.enviar(True)
+        
+        
 
     def OnClickedModificar(self,event):
         print('Se ha pulsado boton Modificar')

@@ -17,7 +17,7 @@ class Conexion:
         self.envios = self.db['envios']
     
     def insertar_envios(self,dic_paquete):
-        self.envios.insert(dic_paquete)
+        return self.envios.insert(dic_paquete)
         
          
     def insertar_electricidad(self):
@@ -91,12 +91,12 @@ class Conexion:
     
     def eliminar_electricidad(self):
         self.electricidad.delete()
-        return 'Borrado de electricidad OK'
+        return 
     
     def eliminar_neumatica(self):
         self.neumatica.delete()
-        return 'Borrado de neumatica OK'
+        return 
 
     def eliminar_envios(self):
         self.envios.delete()
-        return 'Borrado de envios OK'
+        return 
