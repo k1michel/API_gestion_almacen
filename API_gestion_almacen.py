@@ -31,6 +31,8 @@ def post_envios(paquete : Paquete):
         busc=paquete.busc,
     )
     conexion.insertar_envios(dic_paquete)
+    sleep(1)
+    conexion.buscar_codigo()
     return 'Paquete recibido en Envios OK'
 
 @almacen.get("/envios")

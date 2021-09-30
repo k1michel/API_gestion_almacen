@@ -100,3 +100,19 @@ class Conexion:
     def eliminar_envios(self):
         self.envios.delete()
         return 
+    
+    def buscar_codigo(self):
+        existe = False
+        for i in self.envios.all():
+            print(i['busc'])
+            for busqueda in self.electricidad.all(): 
+                print(busqueda['codigo'])
+                if busqueda['codigo']==i['busc']:
+                    encontrado = busqueda
+                    existe = True
+        if existe == True:
+            self.envios.insert(dict(encontrado))
+            
+        else:
+            print('No existe')
+        
