@@ -168,18 +168,20 @@ class interfaz(wx.Frame):
             "busc":self.busqueda_codigo
         }
         respuesta_envio = requests.post('http://0.0.0.0:8000/envios', data=json.dumps(envio))
-        print(f'Respuesta del requests -> {respuesta_envio.json()}')
+        #print(f'Respuesta del requests -> {respuesta_envio.json()}')
         print(f'Envio -> {envio}')
         self.categoria_sel = 'vacio'
         self.busqueda_codigo = 'vacio'
         sleep(1)
-        list_recibir_busqueda = requests.get('http://0.0.0.0:8000/envios')
+        list_recibir_busqueda = requests.post('http://0.0.0.0:8000/envios_recibir')
         print(list_recibir_busqueda)
-        dict_recibir_busqueda = list_recibir_busqueda[1]
+        data_list_recibir_busqueda=list_recibir_busqueda.json()
+        print(data_list_recibir_busqueda)
+        dict_recibir_busqueda = data_list_recibir_busqueda[1]
         self.ctrl_codigo.SetValue(dict_recibir_busqueda['codigo'])
         self.ctrl_categoria.SetValue(dict_recibir_busqueda['categoria'])
         self.ctrl_modelo.SetValue(dict_recibir_busqueda['modelo'])
-        self.ctrl_stock.SetValue(dict_recibir_busqueda['stock'])
+        self.ctrl_stock.SetValue(str(dict_recibir_busqueda['stock']))
     def OnEnterPressedCodigo(self,event):
         print('Se ha introducido codigo para buscar')
         self.busqueda_codigo = self.ctrl_buscar_codigo.GetValue()

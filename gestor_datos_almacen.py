@@ -24,10 +24,10 @@ class Conexion:
 
         self.electricidad.insert(
             dict(
-                codigo = 'A0001',
+                codigo = 'A0004',
                 categoria = 'cable',
                 modelo = 'Azul 2.5 mm',
-                stock = 2,
+                stock = '2',
                 fecha = '2020'
             ))
 
@@ -36,7 +36,7 @@ class Conexion:
                 codigo = 'A0002',
                 categoria = 'dispositivo',
                 modelo = 'fuente alimentacion mofasica 3A',
-                stock = 5,
+                stock = '5',
                 fecha = '2020'
             ))
 
@@ -45,7 +45,7 @@ class Conexion:
                 codigo = 'A0003',
                 categoria = 'termico',
                 modelo = 'termico bipolar 16A',
-                stock = 10,
+                stock = '10',
                 fecha = '2020'
             ))
 
@@ -57,7 +57,7 @@ class Conexion:
                 codigo = 'B0001',
                 categoria = 'ev',
                 modelo = 'ev doble camara',
-                stock = 20,
+                stock = '20',
                 fecha = '2020'
             ))
 
@@ -66,7 +66,7 @@ class Conexion:
                 codigo = 'B0002',
                 categoria = 'racor',
                 modelo = 'rosca 3/4 d8',
-                stock = 15,
+                stock = '15',
                 fecha = '2020'
             ))
 
@@ -75,7 +75,7 @@ class Conexion:
                 codigo = 'B0003',
                 categoria = 'toma',
                 modelo = 'recto d8-union',
-                stock = 21,
+                stock = '21',
                 fecha = '2020'
             ))
 

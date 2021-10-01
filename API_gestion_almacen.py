@@ -12,7 +12,7 @@ class Datos(BaseModel):
     codigo: str                     
     categoria: str  
     modelo: str
-    stock: int
+    stock: str
     fecha: str
 
 class Paquete(BaseModel):         
@@ -34,6 +34,9 @@ def post_envios(paquete : Paquete):
     conexion.insertar_envios(dic_paquete)
     conexion.buscar_codigo()
     return 'Paquete recibido en Envios OK'
+@almacen.post("/envios_recibir")
+def post_recibir_envios():
+    return conexion.mostrar_envios()
 
 @almacen.get("/envios")
 def get_envios():
