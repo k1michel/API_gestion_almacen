@@ -5,8 +5,8 @@ from time import sleep
 
 
 class interfaz(wx.Frame):
-    categoria_sel : str = 'vacio'
-    busqueda_codigo : str = 'vacio'
+    categoria_sel : str = 'vacio_0000'
+    busqueda_codigo : str = 'vacio_0000'
     
     def __init__(self, *args, **kw):
         super(interfaz, self).__init__(*args, **kw)
@@ -151,13 +151,16 @@ class interfaz(wx.Frame):
         self.Close(True)
     def OnClickedCerrar(self,e):                             
         print("El boton de CERRAR ha sido presionado")     
-        print(self.envio)
         self.OnClose(True)
     
     def OnSelect(self,event):
         self.categoria_sel = self.cbbox_categoria.GetValue()
-        self.enviar(True)        
-
+        if self.categoria_sel == 'electricidad':
+            muestra_electricidad = requests.post('http://0.0.0.0:8000/electricidad_mostrar')
+            list_muestra_electricidad = muestra_electricidad.json()
+            print(list_muestra_electricidad)
+            self.ctrl_resultado.SetValue(list_muestra_electricidad)
+        self.enviar(True)
     def OnEnterPressedBuscar(self,event):
         self.busqueda = self.ctrl_buscar.GetValue() 
         print(f'Se ha buscado {self.busqueda}')
@@ -170,19 +173,20 @@ class interfaz(wx.Frame):
         respuesta_envio = requests.post('http://0.0.0.0:8000/envios', data=json.dumps(envio))
         #print(f'Respuesta del requests -> {respuesta_envio.json()}')
         print(f'Envio -> {envio}')
-        self.categoria_sel = 'vacio'
-        self.busqueda_codigo = 'vacio'
+        self.categoria_sel = 'vacio_0000'
+        self.busqueda_codigo = 'vacio_0000'
         sleep(1)
         list_recibir_busqueda = requests.post('http://0.0.0.0:8000/envios_recibir')
         print(list_recibir_busqueda)
         data_list_recibir_busqueda=list_recibir_busqueda.json()
         print(data_list_recibir_busqueda)
-        dict_recibir_busqueda = data_list_recibir_busqueda[1]
-        self.ctrl_codigo.SetValue(dict_recibir_busqueda['codigo'])
-        self.ctrl_categoria.SetValue(dict_recibir_busqueda['categoria'])
-        self.ctrl_modelo.SetValue(dict_recibir_busqueda['modelo'])
-        self.ctrl_stock.SetValue(str(dict_recibir_busqueda['stock']))
-        self.ctrl_fecha.SetValue(dict_recibir_busqueda['fecha'])
+        if data_list_recibir_busqueda[0]['busc'] != 'vacio_0000':
+            dict_recibir_busqueda = data_list_recibir_busqueda[1]
+            self.ctrl_codigo.SetValue(dict_recibir_busqueda['codigo'])
+            self.ctrl_categoria.SetValue(dict_recibir_busqueda['categoria'])
+            self.ctrl_modelo.SetValue(dict_recibir_busqueda['modelo'])
+            self.ctrl_stock.SetValue(str(dict_recibir_busqueda['stock']))
+            self.ctrl_fecha.SetValue(dict_recibir_busqueda['fecha'])
     def OnEnterPressedCodigo(self,event):
         print('Se ha introducido codigo para buscar')
         self.busqueda_codigo = self.ctrl_buscar_codigo.GetValue()

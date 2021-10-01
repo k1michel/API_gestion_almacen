@@ -117,17 +117,18 @@ class Conexion:
         return 
     
     def buscar_codigo(self):
-        existe = False
+        existe_codigo = False
         for i in self.envios.all():
-            print(i['busc'])
-            for busqueda in self.electricidad.all(): 
-                print(busqueda['codigo'])
-                if busqueda['codigo']==i['busc']:
-                    encontrado = busqueda
-                    existe = True
-        if existe == True:
-            self.envios.insert(dict(encontrado))
-            
+            if len(i['busc']) != 'vacio_0000':
+                print(i['busc'])
+                for busqueda_codigo in self.electricidad.all(): 
+                    print(busqueda_codigo['codigo'])
+                    if busqueda_codigo['codigo']==i['busc']:
+                        encontrado = busqueda_codigo
+                        existe_codigo = True
+        if existe_codigo == True:
+            self.envios.insert(dict(encontrado))         
         else:
             print('No existe')
+        
         
