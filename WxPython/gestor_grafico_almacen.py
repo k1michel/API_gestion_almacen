@@ -1,6 +1,7 @@
 import wx
 import requests
 import json
+from time import sleep
 
 
 class interfaz(wx.Frame):
@@ -171,9 +172,14 @@ class interfaz(wx.Frame):
         print(f'Envio -> {envio}')
         self.categoria_sel = 'vacio'
         self.busqueda_codigo = 'vacio'
-        
-        
-        
+        sleep(1)
+        list_recibir_busqueda = requests.get('http://0.0.0.0:8000/envios')
+        print(list_recibir_busqueda)
+        dict_recibir_busqueda = list_recibir_busqueda[1]
+        self.ctrl_codigo.SetValue(dict_recibir_busqueda['codigo'])
+        self.ctrl_categoria.SetValue(dict_recibir_busqueda['categoria'])
+        self.ctrl_modelo.SetValue(dict_recibir_busqueda['modelo'])
+        self.ctrl_stock.SetValue(dict_recibir_busqueda['stock'])
     def OnEnterPressedCodigo(self,event):
         print('Se ha introducido codigo para buscar')
         self.busqueda_codigo = self.ctrl_buscar_codigo.GetValue()

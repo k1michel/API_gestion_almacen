@@ -26,19 +26,20 @@ conexion = Conexion()
 @almacen.post("/envios")
 def post_envios(paquete : Paquete):
     conexion = Conexion()
+    conexion.eliminar_envios()
     dic_paquete= dict(
         cat=paquete.cat,
         busc=paquete.busc,
     )
     conexion.insertar_envios(dic_paquete)
-    sleep(1)
     conexion.buscar_codigo()
     return 'Paquete recibido en Envios OK'
 
 @almacen.get("/envios")
 def get_envios():
     conexion = Conexion()
-    return conexion.mostrar_envios()
+    list_envio = conexion.mostrar_envios()
+    return list_envio
 
 @almacen.delete("/envios")
 def delete_envios():
