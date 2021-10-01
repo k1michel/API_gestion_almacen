@@ -24,7 +24,15 @@ class Conexion:
 
         self.electricidad.insert(
             dict(
-                codigo = 'A0004',
+                codigo = 'A0000',
+                categoria = 'error integrity error de la propia sqlite',
+                modelo = ' ',
+                stock = ' ',
+                fecha = ' '
+            ))
+        self.electricidad.insert(    
+            dict(
+                codigo = 'A0001',
                 categoria = 'cable',
                 modelo = 'Azul 2.5 mm',
                 stock = '2',
@@ -38,7 +46,7 @@ class Conexion:
                 modelo = 'fuente alimentacion mofasica 3A',
                 stock = '5',
                 fecha = '2020'
-            ))
+            )) 
 
         self.electricidad.insert(
             dict(
@@ -48,7 +56,14 @@ class Conexion:
                 stock = '10',
                 fecha = '2020'
             ))
-
+        self.electricidad.insert(
+            dict(
+                codigo = 'A0004',
+                categoria = 'plc',
+                modelo = 'plc siemens 1214c DC/DC/DC',
+                stock = '5',
+                fecha = '2020'
+            ))   
 
     def insertar_neumatica(self):
         

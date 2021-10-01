@@ -22,7 +22,7 @@ class interfaz(wx.Frame):
         self.ip_server = 'http://0.0.0.0:8000/'
         
         ## VENTANA ##       
-        self.SetSize(1080,720)
+        self.SetSize(1080,1080)
         self.SetTitle('GESTION ALMACEN by Michel Alvarez')  
         self.SetBackgroundColour((0, 176, 246))
         
@@ -76,35 +76,35 @@ class interfaz(wx.Frame):
         self.txt_codigo.SetFont(wx.Font(10, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False))
         self.sizer.Add(self.txt_codigo, pos=(5, 0),span=wx.DefaultSpan, flag=wx.ALIGN_CENTRE)
         
-        self.ctrl_codigo= wx.TextCtrl(self.pnl, size= (120,30),style = wx.TE_MULTILINE)
+        self.ctrl_codigo= wx.TextCtrl(self.pnl, size= (120,60),style = wx.TE_MULTILINE)
         self.sizer.Add(self.ctrl_codigo, pos=(6, 0),span=wx.DefaultSpan, flag=wx.ALIGN_CENTRE)
 
         self.txt_categoria= wx.StaticText(self.pnl, label= 'Categoria')
         self.txt_categoria.SetFont(wx.Font(10, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False))
         self.sizer.Add(self.txt_categoria, pos=(5, 1),span=wx.DefaultSpan, flag=wx.ALIGN_CENTRE)
         
-        self.ctrl_categoria= wx.TextCtrl(self.pnl, size= (120,30),style = wx.TE_MULTILINE)
+        self.ctrl_categoria= wx.TextCtrl(self.pnl, size= (120,60),style = wx.TE_MULTILINE)
         self.sizer.Add(self.ctrl_categoria, pos=(6, 1),span=wx.DefaultSpan, flag=wx.ALIGN_CENTRE)
 
         self.txt_modelo= wx.StaticText(self.pnl, label= 'Modelo')
         self.txt_modelo.SetFont(wx.Font(10, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False))
         self.sizer.Add(self.txt_modelo, pos=(5, 2),span=wx.DefaultSpan, flag=wx.ALIGN_CENTRE)
 
-        self.ctrl_modelo= wx.TextCtrl(self.pnl, size= (120,30),style = wx.TE_MULTILINE)
+        self.ctrl_modelo= wx.TextCtrl(self.pnl, size= (120,60),style = wx.TE_MULTILINE)
         self.sizer.Add(self.ctrl_modelo, pos=(6, 2),span=wx.DefaultSpan, flag=wx.ALIGN_CENTRE)
 
         self.txt_stock= wx.StaticText(self.pnl, label= 'Stock')
         self.txt_stock.SetFont(wx.Font(10, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False))
         self.sizer.Add(self.txt_stock, pos=(7, 0),span=wx.DefaultSpan, flag=wx.ALIGN_CENTRE)
 
-        self.ctrl_stock= wx.TextCtrl(self.pnl, size= (120,30),style = wx.TE_MULTILINE)
+        self.ctrl_stock= wx.TextCtrl(self.pnl, size= (120,60),style = wx.TE_MULTILINE)
         self.sizer.Add(self.ctrl_stock, pos=(8, 0),span=wx.DefaultSpan, flag=wx.ALIGN_CENTRE)
 
         self.txt_fecha= wx.StaticText(self.pnl, label= 'Ultima modificacion')
         self.txt_fecha.SetFont(wx.Font(10, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False))
         self.sizer.Add(self.txt_fecha, pos=(7, 1),span=wx.DefaultSpan, flag=wx.ALIGN_CENTRE)
 
-        self.ctrl_fecha= wx.TextCtrl(self.pnl, size= (120,30),style = wx.TE_MULTILINE)
+        self.ctrl_fecha= wx.TextCtrl(self.pnl, size= (120,60),style = wx.TE_MULTILINE)
         self.sizer.Add(self.ctrl_fecha, pos=(8, 1),span=wx.DefaultSpan, flag=wx.ALIGN_CENTRE)
         #Modificar y refrescar
         self.modificarButton = wx.Button(self.pnl, label='Modificar', size= (90,30))   
@@ -182,6 +182,7 @@ class interfaz(wx.Frame):
         self.ctrl_categoria.SetValue(dict_recibir_busqueda['categoria'])
         self.ctrl_modelo.SetValue(dict_recibir_busqueda['modelo'])
         self.ctrl_stock.SetValue(str(dict_recibir_busqueda['stock']))
+        self.ctrl_fecha.SetValue(dict_recibir_busqueda['fecha'])
     def OnEnterPressedCodigo(self,event):
         print('Se ha introducido codigo para buscar')
         self.busqueda_codigo = self.ctrl_buscar_codigo.GetValue()
