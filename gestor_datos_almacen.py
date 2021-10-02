@@ -69,6 +69,15 @@ class Conexion:
         
         self.neumatica.insert(
             dict(
+                codigo = 'B0000',
+                categoria = 'error integrity error de la propia sqlite',
+                modelo = ' ',
+                stock = ' ',
+                fecha = ' '
+            ))
+
+        self.neumatica.insert(
+            dict(
                 codigo = 'B0001',
                 categoria = 'ev',
                 modelo = 'ev doble camara',
@@ -119,9 +128,14 @@ class Conexion:
     def buscar_codigo(self):
         existe_codigo = False
         for i in self.envios.all():
-            if len(i['busc']) != 'vacio_0000':
-                print(i['busc'])
-                for busqueda_codigo in self.electricidad.all(): 
+            print(i['busc'])
+            for busqueda_codigo in self.electricidad.all(): 
+                print(busqueda_codigo['codigo'])
+                if busqueda_codigo['codigo']==i['busc']:
+                    encontrado = busqueda_codigo
+                    existe_codigo = True
+            if existe_codigo == False:
+                for busqueda_codigo in self.neumatica.all(): 
                     print(busqueda_codigo['codigo'])
                     if busqueda_codigo['codigo']==i['busc']:
                         encontrado = busqueda_codigo

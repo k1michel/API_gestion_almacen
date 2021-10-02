@@ -3,7 +3,6 @@ import requests
 import json
 from time import sleep
 
-
 class interfaz(wx.Frame):
     categoria_sel : str = 'vacio_0000'
     busqueda_codigo : str = 'vacio_0000'
@@ -18,7 +17,7 @@ class interfaz(wx.Frame):
     def InitUI(self):
 
         self.pnl = wx.Panel(self)
-        
+       
         self.ip_server = 'http://0.0.0.0:8000/'
         
         ## VENTANA ##       
@@ -27,7 +26,7 @@ class interfaz(wx.Frame):
         self.SetBackgroundColour((0, 176, 246))
         
 
-        self.sizer = wx.GridBagSizer(16,3)
+        self.sizer = wx.GridBagSizer(16,5)
         
 
         ## Titulo
@@ -43,6 +42,10 @@ class interfaz(wx.Frame):
         self.closeButton.SetBackgroundColour(wx.Colour(0,0,0)) 
         self.sizer.Add(self.closeButton, pos=(1, 1),span=wx.DefaultSpan, flag=wx.ALIGN_CENTER)
 
+        ## Base de datos completa
+        #self.ctrl_basedatos = wx.TextCtrl(self.pnl,size=(400,1000),style = wx.TE_MULTILINE)
+        #self.sizer.Add(self.ctrl_basedatos, pos=(2, 4), flag=wx.ALIGN_CENTRE)
+
         ## Listado 
         self.txt_listado= wx.StaticText(self.pnl, label= 'Listado')
         self.txt_listado.SetFont(wx.Font(10, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False))
@@ -51,14 +54,14 @@ class interfaz(wx.Frame):
         self.ctrl_buscar= wx.TextCtrl(self.pnl, size= (120,30),style = wx.TE_PROCESS_ENTER)
         self.ctrl_buscar.Bind(wx.EVT_TEXT_ENTER,self.OnEnterPressedBuscar)
         self.ctrl_buscar.SetValue('Buscar...')
-        self.sizer.Add(self.ctrl_buscar, pos=(13, 1),span=wx.DefaultSpan, flag=wx.ALIGN_CENTER)
+        self.sizer.Add(self.ctrl_buscar, pos=(2, 1),span=wx.DefaultSpan, flag=wx.ALIGN_CENTER)
         
         self.categoria =  u"electricidad|neumatica".split("|")
         self.cbbox_categoria = wx.ComboBox(self,-1,choices= self.categoria,size=(120,30))
         self.Bind(wx.EVT_COMBOBOX, self.OnSelect)
         self.sizer.Add(self.cbbox_categoria, pos=(12, 1),span=wx.DefaultSpan, flag=wx.ALIGN_CENTER)
 
-        self.ctrl_resultado = wx.TextCtrl(self.pnl,size=(200,1000),style = wx.TE_MULTILINE)
+        self.ctrl_resultado = wx.TextCtrl(self.pnl,size=(200,1000),style = wx.TE_MULTILINE|wx.TE_READONLY)
         self.sizer.Add(self.ctrl_resultado, pos=(14, 1), flag=wx.ALIGN_CENTRE)
         
 
@@ -113,11 +116,11 @@ class interfaz(wx.Frame):
         self.modificarButton.SetForegroundColour(wx.Colour(255,255,255))
         self.sizer.Add(self.modificarButton, pos=(9, 1),span=wx.DefaultSpan, flag=wx.ALIGN_CENTRE)
 
-        self.refrescarButton = wx.Button(self.pnl, label='Refrescar', size= (90,30))   
-        self.refrescarButton.Bind(wx.EVT_BUTTON, self.OnClickedRefrescar) 
-        self.refrescarButton.SetBackgroundColour(wx.Colour(0,0,0))
-        self.refrescarButton.SetForegroundColour(wx.Colour(255,255,255))
-        self.sizer.Add(self.refrescarButton, pos=(10, 1),span=wx.DefaultSpan, flag=wx.ALIGN_CENTRE)
+        self.nuevoButton = wx.Button(self.pnl, label='NUEVO', size= (90,30))   
+        self.nuevoButton.Bind(wx.EVT_BUTTON, self.OnClickedNuevo) 
+        self.nuevoButton.SetBackgroundColour(wx.Colour(0,0,0))
+        self.nuevoButton.SetForegroundColour(wx.Colour(255,255,255))
+        self.sizer.Add(self.nuevoButton, pos=(10, 1),span=wx.DefaultSpan, flag=wx.ALIGN_CENTRE)
 
         #Logo
         self.txt_logo1= wx.StaticText(self.pnl, label= 'Logo1')
@@ -133,7 +136,8 @@ class interfaz(wx.Frame):
         self.txt_imagen.SetFont(wx.Font(10, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False))
         self.sizer.Add(self.txt_imagen, pos=(15, 1),span=wx.DefaultSpan, flag=wx.ALIGN_CENTER)
 
-        #self.sizer.AddGrowableCol(1)
+        #self.sizer.AddGrowableCol(4)
+        
         
         
         
@@ -159,21 +163,28 @@ class interfaz(wx.Frame):
             muestra_electricidad = requests.post('http://0.0.0.0:8000/electricidad_mostrar')
             list_muestra_electricidad = muestra_electricidad.json()
             print(list_muestra_electricidad)
-            self.ctrl_resultado.SetValue(list_muestra_electricidad)
-        self.enviar(True)
+            list_separada_electricidad = [i for i in list_muestra_electricidad[1:]]
+            separada_electricidad =json.dumps(list_separada_electricidad, indent=4) # arg=sort_keys=True para ordenar alfabeticamente
+            self.ctrl_resultado.SetValue(str(separada_electricidad))
+        if self.categoria_sel == 'neumatica':
+            muestra_neumatica = requests.post('http://0.0.0.0:8000/neumatica_mostrar')
+            list_muestra_neumatica = muestra_neumatica.json()
+            print(list_muestra_neumatica)
+            list_separada_neumatica = [i for i in list_muestra_neumatica[1:]]
+            separada_neumatica =json.dumps(list_separada_neumatica, indent=4) # arg=sort_keys=True para ordenar alfabeticamente
+            self.ctrl_resultado.SetValue(str(separada_neumatica))
+        
     def OnEnterPressedBuscar(self,event):
         self.busqueda = self.ctrl_buscar.GetValue() 
         print(f'Se ha buscado {self.busqueda}')
 
     def enviar(self,e):
         envio = {
-            "cat": self.categoria_sel,
             "busc":self.busqueda_codigo
         }
         respuesta_envio = requests.post('http://0.0.0.0:8000/envios', data=json.dumps(envio))
         #print(f'Respuesta del requests -> {respuesta_envio.json()}')
         print(f'Envio -> {envio}')
-        self.categoria_sel = 'vacio_0000'
         self.busqueda_codigo = 'vacio_0000'
         sleep(1)
         list_recibir_busqueda = requests.post('http://0.0.0.0:8000/envios_recibir')
@@ -198,8 +209,8 @@ class interfaz(wx.Frame):
     def OnClickedModificar(self,event):
         print('Se ha pulsado boton Modificar')
 
-    def OnClickedRefrescar(self,event):
-        print('Se ha pulsado boton Refrescar')
+    def OnClickedNuevo(self,event):
+        print('Se ha pulsado boton Nuevo')
 
 
 
