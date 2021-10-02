@@ -2,6 +2,7 @@ import wx
 import requests
 import json
 from time import sleep
+from ObjectListView import ObjectListView, ColumnDefn
 
 class interfaz(wx.Frame):
     categoria_sel : str = 'vacio_0000'
@@ -17,13 +18,13 @@ class interfaz(wx.Frame):
     def InitUI(self):
 
         self.pnl = wx.Panel(self)
-       
+        
         self.ip_server = 'http://0.0.0.0:8000/'
         
         ## VENTANA ##       
         self.SetSize(1080,1080)
         self.SetTitle('GESTION ALMACEN by Michel Alvarez')  
-        self.SetBackgroundColour((0, 176, 246))
+        self.SetBackgroundColour((237, 237, 227))
         
 
         self.sizer = wx.GridBagSizer(16,5)
@@ -33,7 +34,7 @@ class interfaz(wx.Frame):
         self.fuente_titulo = wx.Font(20, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False)
         self.titulo= wx.StaticText(self.pnl, label= 'GESTION ALMACEN')
         self.titulo.SetFont(self.fuente_titulo)
-        self.titulo.SetForegroundColour(wx.Colour(255,255,255))
+        self.titulo.SetForegroundColour(wx.Colour(0,0,0))
         self.sizer.Add(self.titulo, pos=(0, 1),span=wx.DefaultSpan, flag=wx.ALIGN_CENTER)
         ### Boton Cerrar ###
         self.closeButton = wx.Button(self.pnl, label='Cerrar')   
@@ -61,10 +62,18 @@ class interfaz(wx.Frame):
         self.Bind(wx.EVT_COMBOBOX, self.OnSelect)
         self.sizer.Add(self.cbbox_categoria, pos=(12, 1),span=wx.DefaultSpan, flag=wx.ALIGN_CENTER)
 
-        self.ctrl_resultado = wx.TextCtrl(self.pnl,size=(200,1000),style = wx.TE_MULTILINE|wx.TE_READONLY)
-        self.sizer.Add(self.ctrl_resultado, pos=(14, 1), flag=wx.ALIGN_CENTRE)
-        
-
+        self.resultado = wx.ListCtrl(self.pnl,-1, style = wx.LC_REPORT)
+        self.sizer.Add(self.resultado, pos=(14, 1), flag=wx.ALIGN_CENTRE)
+        self.resultado.InsertColumn(0, 'Item', width = 100) 
+        self.resultado.InsertColumn(1, 'Valor', wx.LIST_FORMAT_RIGHT, 100)
+        #self.index = self.resultado.InsertStringItem(10000, 0) 
+        '''
+        self.resultado.SetStringItem(0, 0,'codigo')
+        self.resultado.SetStringItem(1, 0,'categoria')
+        self.resultado.SetStringItem(2, 0,'modelo')
+        self.resultado.SetStringItem(3, 0,'stock')
+        self.resultado.SetStringItem(4, 0,'fecha')
+        '''
         ## Referenciado
         self.txt_referenciado= wx.StaticText(self.pnl, label= 'Referenciado')
         self.txt_referenciado.SetFont(wx.Font(10, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False))
@@ -123,13 +132,13 @@ class interfaz(wx.Frame):
         self.sizer.Add(self.nuevoButton, pos=(10, 1),span=wx.DefaultSpan, flag=wx.ALIGN_CENTRE)
 
         #Logo
-        self.txt_logo1= wx.StaticText(self.pnl, label= 'Logo1')
-        self.txt_logo1.SetFont(wx.Font(10, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False))
-        self.sizer.Add(self.txt_logo1, pos=(0, 0),span=wx.DefaultSpan, flag=wx.ALIGN_CENTER)
+        self.imagen1 = wx.Image('logo1.png', wx.BITMAP_TYPE_PNG).Rescale(60, 60).ConvertToBitmap() 
+        self.logo1= wx.StaticBitmap(self.pnl, -1, self.imagen1)
+        self.sizer.Add(self.logo1, pos=(0, 0),span=wx.DefaultSpan, flag=wx.ALIGN_CENTER)
 
-        self.txt_logo2= wx.StaticText(self.pnl, label= 'Logo2')
-        self.txt_logo2.SetFont(wx.Font(10, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False))
-        self.sizer.Add(self.txt_logo2, pos=(0, 2),span=wx.DefaultSpan, flag=wx.ALIGN_CENTER)
+        
+        #self.logo2= wx.StaticBitmap(self.pnl, -1, self.imagen1)
+        #self.sizer.Add(self.logo2, pos=(0, 2),span=wx.DefaultSpan, flag=wx.ALIGN_CENTER)
 
         ## Imagen
         self.txt_imagen= wx.StaticText(self.pnl, label= 'Imagen')
@@ -164,8 +173,18 @@ class interfaz(wx.Frame):
             list_muestra_electricidad = muestra_electricidad.json()
             print(list_muestra_electricidad)
             list_separada_electricidad = [i for i in list_muestra_electricidad[1:]]
-            separada_electricidad =json.dumps(list_separada_electricidad, indent=4) # arg=sort_keys=True para ordenar alfabeticamente
-            self.ctrl_resultado.SetValue(str(separada_electricidad))
+            '''
+            for i in list_muestra_electricidad[1:]:
+                self.resultado.SetStringItem(self.index,0,i['codigo'])
+                self.resultado.SetStringItem(self.index, 1,i['categoria'] )
+                self.resultado.SetStringItem(self.index, 2,i['modelo'])
+                self.resultado.SetStringItem(self.index, 3,str(i['stock']))
+                self.resultado.SetStringItem(self.index, 4,str(i['fecha']))
+                '''
+            
+            self.resultado.SetColumns(list_separada_electricidad)
+            self.resultado.SetObjects(self.dataObjects)
+            self.resultado.cellEditMode = ObjectListView.CELLEDIT_F2ONLY
         if self.categoria_sel == 'neumatica':
             muestra_neumatica = requests.post('http://0.0.0.0:8000/neumatica_mostrar')
             list_muestra_neumatica = muestra_neumatica.json()
