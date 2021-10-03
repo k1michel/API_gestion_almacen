@@ -62,18 +62,16 @@ class interfaz(wx.Frame):
         self.Bind(wx.EVT_COMBOBOX, self.OnSelect)
         self.sizer.Add(self.cbbox_categoria, pos=(12, 1),span=wx.DefaultSpan, flag=wx.ALIGN_CENTER)
 
-        self.resultado = wx.ListCtrl(self.pnl,-1, style = wx.LC_REPORT)
+        #self.resultado = wx.ListCtrl(self.pnl,-1, style = wx.LC_REPORT)
+        self.resultado = ObjectListView(self.pnl, wx.ID_ANY, style=wx.LC_REPORT|wx.SUNKEN_BORDER)
+        self.resultado.SetColumns([
+                ColumnDefn("Codigo", "left", 90,"codigo"),
+                ColumnDefn("Categoria", "center", 100,"categoria"),
+                ColumnDefn("Modelo", "left", 200,"modelo"),
+                ColumnDefn("Stock", "center", 90,"stock"),
+                ColumnDefn("Fecha", "center", 100,"fecha")
+            ])
         self.sizer.Add(self.resultado, pos=(14, 1), flag=wx.ALIGN_CENTRE)
-        self.resultado.InsertColumn(0, 'Item', width = 100) 
-        self.resultado.InsertColumn(1, 'Valor', wx.LIST_FORMAT_RIGHT, 100)
-        #self.index = self.resultado.InsertStringItem(10000, 0) 
-        '''
-        self.resultado.SetStringItem(0, 0,'codigo')
-        self.resultado.SetStringItem(1, 0,'categoria')
-        self.resultado.SetStringItem(2, 0,'modelo')
-        self.resultado.SetStringItem(3, 0,'stock')
-        self.resultado.SetStringItem(4, 0,'fecha')
-        '''
         ## Referenciado
         self.txt_referenciado= wx.StaticText(self.pnl, label= 'Referenciado')
         self.txt_referenciado.SetFont(wx.Font(10, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False))
@@ -132,18 +130,17 @@ class interfaz(wx.Frame):
         self.sizer.Add(self.nuevoButton, pos=(10, 1),span=wx.DefaultSpan, flag=wx.ALIGN_CENTRE)
 
         #Logo
-        self.imagen1 = wx.Image('logo1.png', wx.BITMAP_TYPE_PNG).Rescale(60, 60).ConvertToBitmap() 
-        self.logo1= wx.StaticBitmap(self.pnl, -1, self.imagen1)
-        self.sizer.Add(self.logo1, pos=(0, 0),span=wx.DefaultSpan, flag=wx.ALIGN_CENTER)
+        self.imagen1 = wx.Image('logo1.png', wx.BITMAP_TYPE_PNG).Rescale(150, 150).ConvertToBitmap() 
+        #self.logo1= wx.StaticBitmap(self.pnl, -1, self.imagen1)
+        #self.sizer.Add(self.logo1, pos=(0, 0),span=wx.DefaultSpan, flag=wx.ALIGN_CENTER)
 
         
         #self.logo2= wx.StaticBitmap(self.pnl, -1, self.imagen1)
         #self.sizer.Add(self.logo2, pos=(0, 2),span=wx.DefaultSpan, flag=wx.ALIGN_CENTER)
 
         ## Imagen
-        self.txt_imagen= wx.StaticText(self.pnl, label= 'Imagen')
-        self.txt_imagen.SetFont(wx.Font(10, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False))
-        self.sizer.Add(self.txt_imagen, pos=(15, 1),span=wx.DefaultSpan, flag=wx.ALIGN_CENTER)
+        self.imagen_grande= wx.StaticBitmap(self.pnl,-1, self.imagen1)
+        self.sizer.Add(self.imagen_grande, pos=(15, 1),span=wx.DefaultSpan, flag=wx.ALIGN_CENTER)
 
         #self.sizer.AddGrowableCol(4)
         
@@ -173,25 +170,13 @@ class interfaz(wx.Frame):
             list_muestra_electricidad = muestra_electricidad.json()
             print(list_muestra_electricidad)
             list_separada_electricidad = [i for i in list_muestra_electricidad[1:]]
-            '''
-            for i in list_muestra_electricidad[1:]:
-                self.resultado.SetStringItem(self.index,0,i['codigo'])
-                self.resultado.SetStringItem(self.index, 1,i['categoria'] )
-                self.resultado.SetStringItem(self.index, 2,i['modelo'])
-                self.resultado.SetStringItem(self.index, 3,str(i['stock']))
-                self.resultado.SetStringItem(self.index, 4,str(i['fecha']))
-                '''
-            
-            self.resultado.SetColumns(list_separada_electricidad)
-            self.resultado.SetObjects(self.dataObjects)
-            self.resultado.cellEditMode = ObjectListView.CELLEDIT_F2ONLY
+            self.resultado.SetObjects(list_separada_electricidad)
         if self.categoria_sel == 'neumatica':
             muestra_neumatica = requests.post('http://0.0.0.0:8000/neumatica_mostrar')
             list_muestra_neumatica = muestra_neumatica.json()
             print(list_muestra_neumatica)
             list_separada_neumatica = [i for i in list_muestra_neumatica[1:]]
-            separada_neumatica =json.dumps(list_separada_neumatica, indent=4) # arg=sort_keys=True para ordenar alfabeticamente
-            self.ctrl_resultado.SetValue(str(separada_neumatica))
+            self.resultado.SetObjects(list_separada_neumatica)
         
     def OnEnterPressedBuscar(self,event):
         self.busqueda = self.ctrl_buscar.GetValue() 
