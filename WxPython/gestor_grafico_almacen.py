@@ -57,7 +57,7 @@ class interfaz(wx.Frame):
         self.ctrl_buscar.SetValue('Buscar...')
         self.sizer.Add(self.ctrl_buscar, pos=(2, 1),span=wx.DefaultSpan, flag=wx.ALIGN_CENTER)
         
-        self.categoria =  u"electricidad|neumatica".split("|")
+        self.categoria =  ["electricidad","neumatica"]
         self.cbbox_categoria = wx.ComboBox(self,-1,choices= self.categoria,size=(120,30))
         self.Bind(wx.EVT_COMBOBOX, self.OnSelect)
         self.sizer.Add(self.cbbox_categoria, pos=(12, 1),span=wx.DefaultSpan, flag=wx.ALIGN_CENTER)
@@ -166,13 +166,13 @@ class interfaz(wx.Frame):
     def OnSelect(self,event):
         self.categoria_sel = self.cbbox_categoria.GetValue()
         if self.categoria_sel == 'electricidad':
-            muestra_electricidad = requests.post('http://0.0.0.0:8000/electricidad_mostrar')
+            muestra_electricidad = requests.get('http://0.0.0.0:8000/electricidad_mostrar')
             list_muestra_electricidad = muestra_electricidad.json()
             print(list_muestra_electricidad)
             list_separada_electricidad = [i for i in list_muestra_electricidad[1:]]
             self.resultado.SetObjects(list_separada_electricidad)
         if self.categoria_sel == 'neumatica':
-            muestra_neumatica = requests.post('http://0.0.0.0:8000/neumatica_mostrar')
+            muestra_neumatica = requests.get('http://0.0.0.0:8000/neumatica_mostrar')
             list_muestra_neumatica = muestra_neumatica.json()
             print(list_muestra_neumatica)
             list_separada_neumatica = [i for i in list_muestra_neumatica[1:]]
@@ -215,6 +215,13 @@ class interfaz(wx.Frame):
 
     def OnClickedNuevo(self,event):
         print('Se ha pulsado boton Nuevo')
+        nuevo_item= {
+            'codigo':self.ctrl_codigo.GetValue(),
+            'categoria':self.ctrl_categoria.GetValue(),
+            'modelo':
+            'stock':
+            'fecha':
+        }
 
 
 
