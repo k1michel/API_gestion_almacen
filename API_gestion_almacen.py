@@ -58,7 +58,7 @@ def post_electricidad():
     conexion.insertar_electricidad()
     return 'Insertados en Electricidad OK'
 
-@almacen.post("/electricidad_mostrar")
+@almacen.get("/electricidad_mostrar")
 def post_electricidad_mostrar():
     return conexion.mostrar_electricidad()
 
@@ -67,7 +67,7 @@ def post_neumatica():
     conexion.insertar_neumatica()
     return 'Insertados en Neumatica OK'
 
-@almacen.post("/neumatica_mostrar")
+@almacen.get("/neumatica_mostrar")
 def post_electricidad_mostrar():
     return conexion.mostrar_neumatica()
 
