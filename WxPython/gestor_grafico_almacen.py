@@ -4,6 +4,7 @@ import json
 from time import sleep
 from ObjectListView import ObjectListView, ColumnDefn
 
+
 class interfaz(wx.Frame):
     categoria_sel : str = 'vacio_0000'
     busqueda_codigo : str = 'vacio_0000'
