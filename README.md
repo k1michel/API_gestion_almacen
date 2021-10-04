@@ -1,4 +1,5 @@
-API PARA LA GESTION DE STOCK DE UN ALMECEN
+GESTION DE STOCK DE UN ALMECEN EN RED LOCAL: UN SERVIDOR Y VARIOS CLIENTES
 
-La API sera la encargada de visualizar el stock de las diferentes bases de datos con materiales del almacen. Asi como introducir o eliminar datos de las diferentes BdD.
-Con una Raspberry Pi conectada a la misma red y un lector de codigo de barras por conexion USB, se podrán eliminar unidades de materiales del almacen para sacarlos del almacen.
+Constará de un cliente y un servidor. Este ultimo sera una API REST corriendo en una red local de una empresa y los clientes seran raspberry
+con lector de codigo de barras situadas en diferentes puntos del almacen para controlar el stock que entra y sale, diferenciando proveedores de clientes respectivamente.
+La visualización se realizará en un entorno grafico con wx.pythone en el cual podremos buscar, modificar, crear nuevos registros, etc...
