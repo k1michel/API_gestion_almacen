@@ -49,15 +49,18 @@ class Conexion:
         Base.metadata.create_all(self.engine)  # Creamos la estructura de tablas en la base de datos
 
         self.session = sessionmaker(bind=self.engine)()
-        self.insertar_categorias()
-        self.insertar_productos()
-
-        # print([producto.to_dict() for producto in self.get_productos_de_categoria('electricidad')])
+        
+        #self.insertar_categorias()
+        #self.insertar_productos()
+        
+        '''
+        print([producto.to_dict() for producto in self.get_productos_de_categoria('electricidad')])
         print([categoria.to_dict() for categoria in self.get_categorias()])
         # self.delete_productos()
         print('-'*100)
         self.update_producto('ev doble camara', Producto(grupo='ev', modelo='ev doble camara', stock=15))
         print([categoria.to_dict() for categoria in self.get_categorias()])
+        '''
 
     def insertar_categorias(self):
         electricidad = Categoria(nombre='electricidad')
@@ -103,19 +106,30 @@ class Conexion:
     def delete_productos(self):
         self.session.query(Producto).delete()
         self.session.commit()
-
+        
     def delete_categoria(self, nombre): # Por hacer
-        pass
+        categoria = self.get_categoria(nombre)
+        categoria.delete()
+        self.session.commit()
+        
 
-    def delete_categorias(self): # Por hacer
-        pass
+    def delete_categorias(self):
+        self.session.query(Categoria).delete()
+        self.session.commit()
 
     def get_categorias(self):
         return self.session.query(Categoria).all()
+    
+    def get_categoria(self, nombre):
+        return self.session.query(Categoria).filter(Categoria.nombre == nombre)
 
+    def get_productos(self):
+        return self.session.query(Producto).all()
+    
     def get_producto(self, modelo):
         return self.session.query(Producto).filter(Producto.modelo == modelo)
- 
+    
+
     def get_productos_de_categoria(self, nombre_categoria):
         categoria = (
             self.session.query(Categoria)
@@ -124,13 +138,13 @@ class Conexion:
         )
         return categoria.productos
 
-    def insertar_productos(self):
+    def insertar_productos_manual(self):
         self.add_producto_a_categoria(
             producto = Producto(grupo='cable', modelo='Azul 2.5mm', stock=2, ultima_modificacion=datetime.now()),
             nombre_categoria = 'electricidad'
         )
         self.add_producto_a_categoria(
-            producto = Producto(grupo='dispositivo', modelo='uente alimentacion mofasica 3A', stock=6, ultima_modificacion=datetime.now()),
+            producto = Producto(grupo='dispositivo', modelo='fuente alimentacion mofasica 3A', stock=6, ultima_modificacion=datetime.now()),
             nombre_categoria = 'electricidad'
         )
         self.add_producto_a_categoria(
@@ -146,6 +160,20 @@ class Conexion:
             producto = Producto(grupo='ev', modelo='ev doble camara', stock=20, ultima_modificacion=datetime.now()),
             nombre_categoria = 'neumatica'
         )
+        self.add_producto_a_categoria(
+            producto = Producto(grupo='racor', modelo='rosca 1/4 toma 8 diametro', stock=12, ultima_modificacion=datetime.now()),
+            nombre_categoria = 'neumatica'
+        )
+        self.add_producto_a_categoria(
+            producto = Producto(grupo='conexion', modelo='recto 6 diametro', stock=25, ultima_modificacion=datetime.now()),
+            nombre_categoria = 'neumatica'
+        )
+        self.add_producto_a_categoria(
+            producto = Producto(grupo='bloque ev', modelo='6 modulos profinet in y out power in', stock=5, ultima_modificacion=datetime.now()),
+            nombre_categoria = 'neumatica'
+        )
+    def mostrar_categorias(self):
+        return [categoria.to_dict() for categoria in self.get_categorias()]
     
-    def mostrar(categoria):
-        pass
+    def mostrar_productos(self):
+        return [producto.to_dict() for producto in self.get_productos()]
