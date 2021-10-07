@@ -23,7 +23,7 @@ almacen = FastAPI()
 conexion = Conexion()
 sql_productos = Producto()
 sql_categorias = Categoria ()
-
+conexion.insertar_categorias()
 '''
 @almacen.post("/envios")
 def post_envios(paquete : Paquete):
@@ -51,7 +51,7 @@ def delete_envios():
 
 
 ## MOSTRAR UNICA CATEGORIA
-@almacen.get("/categoria")  
+@almacen.get("/categorias/categoria")  
 def get_categoria(nombre):
     return conexion.get_categoria(nombre=nombre)
 
@@ -59,6 +59,12 @@ def get_categoria(nombre):
 @almacen.get("/categorias")  
 def get_categorias():
     return conexion.mostrar_categorias()
+
+##ELIMINAR TODOS LOS PRODUCTOS
+@almacen.delete("/productos")
+def delete_todas_productos():
+    conexion.delete_productos()
+    return 'ELIMINADOS TODOS LAS PRODUCTOS OK'
 
 ## MOSTRAR UNICO PRODUCTO
 @almacen.get("/producto")
