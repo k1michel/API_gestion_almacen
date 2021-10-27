@@ -219,9 +219,9 @@ class interfaz(wx.Frame):
         nuevo_item= {
             'codigo':self.ctrl_codigo.GetValue(),
             'categoria':self.ctrl_categoria.GetValue(),
-            'modelo':
-            'stock':
-            'fecha':
+            'modelo': self.ctrl_modelo.GetValue(),
+            'stock': self.ctrl_stock.GetValue(),
+            'fecha': self.ctrl_fecha.GetValue()
         }
 
 
