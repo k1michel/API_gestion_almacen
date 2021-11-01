@@ -81,7 +81,19 @@ def delete_neumatica():
     conexion.eliminar_neumatica()
     return 'Eliminado completo Neumatica OK'
 
+@almacen.post("/inventario")
+def post_inventario(nuevo_item):
+    conexion.insertar_inventario(nuevo_item)
+    return 'Nuevo item insertado en Inventario'
 
+@almacen.get("/inventario")
+def get_inventario():
+    return conexion.mostrar_inventario()
+
+@almacen.delete("/inventario")
+def delete_inventario():
+    conexion.eliminar_inventario()
+    return 'Inventario eliminado OK'
 
 
 if __name__ == "__main__":  # si el nombre del script que se esta ejecutando es main realiza lo siguiente

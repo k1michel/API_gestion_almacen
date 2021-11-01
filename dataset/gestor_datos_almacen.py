@@ -15,11 +15,21 @@ class Conexion:
         self.electricidad = self.db['electricidad']  
         self.neumatica = self.db['neumatica'] 
         self.envios = self.db['envios']
+        self.inventario = self.db['inventario']
     
     def insertar_envios(self,dic_paquete):
         return self.envios.insert(dic_paquete)
-        
-         
+    
+    def mostrar_inventario(self):
+        return [dict(inventario) for inventario in self.inventario.all()]
+
+    def eliminar_inventario(self):
+        self.inventario.delete()
+        return
+    
+    def insertar_inventario(self,nuevo_item):
+         return self.inventario.insert(nuevo_item)  
+
     def insertar_electricidad(self):
 
         self.electricidad.insert(
@@ -145,4 +155,4 @@ class Conexion:
         else:
             print('No existe')
         
-        
+     

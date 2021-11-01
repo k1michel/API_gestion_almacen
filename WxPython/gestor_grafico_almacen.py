@@ -9,6 +9,7 @@ class interfaz(wx.Frame):
     categoria_sel : str = 'vacio_0000'
     busqueda_codigo : str = 'vacio_0000'
     
+
     def __init__(self, *args, **kw):
         super(interfaz, self).__init__(*args, **kw)
     
@@ -19,7 +20,7 @@ class interfaz(wx.Frame):
     def InitUI(self):
 
         self.pnl = wx.Panel(self)
-        
+        self.n_pulsado_nuevo = 0
         self.ip_server = 'http://0.0.0.0:8000/'
         
         ## VENTANA ##       
@@ -152,12 +153,9 @@ class interfaz(wx.Frame):
         self.SetSizerAndFit(self.sizer)
         
         
-        
-        
+                                   
+    
 
-
-                                     
-        
     def OnClose(self,e):                                
         self.Close(True)
     def OnClickedCerrar(self,e):                             
@@ -214,15 +212,36 @@ class interfaz(wx.Frame):
     def OnClickedModificar(self,event):
         print('Se ha pulsado boton Modificar')
 
-    def OnClickedNuevo(self,event):
-        print('Se ha pulsado boton Nuevo')
-        nuevo_item= {
-            'codigo':self.ctrl_codigo.GetValue(),
-            'categoria':self.ctrl_categoria.GetValue(),
-            'modelo': self.ctrl_modelo.GetValue(),
-            'stock': self.ctrl_stock.GetValue(),
-            'fecha': self.ctrl_fecha.GetValue()
-        }
+    
+
+    def OnClickedNuevo(self,event):        
+        self.n_pulsado_nuevo += 1 
+        if self.n_pulsado_nuevo == 1:
+            
+            self.ctrl_codigo.SetValue('-> Codigo nuevo...')
+            self.ctrl_categoria.SetValue('-> Categoria nuevo...')
+            self.ctrl_modelo.SetValue('-> Modelo nuevo...')
+            self.ctrl_stock.SetValue('-> Stock nuevo...')
+            self.ctrl_fecha.SetValue('-> Fecha nuevo...')
+            print('Esperando datos para el envio...')
+
+
+        if self.n_pulsado_nuevo == 2:
+            nuevo_item= {
+                'codigo':str(self.ctrl_codigo.GetValue()),
+                'categoria':str(self.ctrl_categoria.GetValue()),
+                'modelo': str(self.ctrl_modelo.GetValue()),
+                'stock': str(self.ctrl_stock.GetValue()),
+                'fecha': str(self.ctrl_fecha.GetValue())
+            }
+            requests.post('http://0.0.0.0:8000/inventario', data=json.dumps(nuevo_item))
+            self.n_pulsado_nuevo = 0
+            
+            print('Nuevo item enviado a Inventario')
+
+        
+        
+
 
 
 
