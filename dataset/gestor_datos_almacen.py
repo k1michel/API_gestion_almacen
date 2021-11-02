@@ -27,8 +27,24 @@ class Conexion:
         self.inventario.delete()
         return
     
-    def insertar_inventario(self,nuevo_item):
-         return self.inventario.insert(nuevo_item)  
+    def insertar_inventario(self,dict_nuevo_item):
+         return self.inventario.insert(dict_nuevo_item)  
+
+    def buscar_codigo_inventario(self):
+        existe_codigo = False
+        for i in self.envios.all():
+            print(i['busc'])
+            for busqueda_codigo in self.inventario.all(): 
+                print(busqueda_codigo['codigo'])
+                if busqueda_codigo['codigo']==i['busc']:
+                    encontrado = busqueda_codigo
+                    existe_codigo = True
+        if existe_codigo == False:
+                encontrado = 'No existe'
+                print('No existe')
+        else:
+            self.envios.insert(dict(encontrado))         
+            
 
     def insertar_electricidad(self):
 

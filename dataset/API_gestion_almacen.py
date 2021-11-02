@@ -29,7 +29,7 @@ def post_envios(paquete : Paquete):
         busc=paquete.busc,
     )
     conexion.insertar_envios(dic_paquete)
-    conexion.buscar_codigo()
+    conexion.buscar_codigo_inventario()
     return 'Paquete recibido en Envios OK'
 @almacen.post("/envios_recibir")
 def post_recibir_envios():
@@ -82,8 +82,16 @@ def delete_neumatica():
     return 'Eliminado completo Neumatica OK'
 
 @almacen.post("/inventario")
-def post_inventario(nuevo_item):
-    conexion.insertar_inventario(nuevo_item)
+def post_inventario(Nuevo_item: Datos):
+    dict_nuevo_item = dict(
+        codigo = Nuevo_item.codigo,
+        categoria = Nuevo_item.categoria,
+        modelo = Nuevo_item.modelo,
+        stock = Nuevo_item.stock,
+        fecha = Nuevo_item.fecha
+
+    )
+    conexion.insertar_inventario(dict_nuevo_item)
     return 'Nuevo item insertado en Inventario'
 
 @almacen.get("/inventario")
@@ -94,6 +102,10 @@ def get_inventario():
 def delete_inventario():
     conexion.eliminar_inventario()
     return 'Inventario eliminado OK'
+
+@almacen.get("/inventario_recibir")
+def get_recibir_inventario():
+    return conexion.mostrar_inventario()
 
 
 if __name__ == "__main__":  # si el nombre del script que se esta ejecutando es main realiza lo siguiente

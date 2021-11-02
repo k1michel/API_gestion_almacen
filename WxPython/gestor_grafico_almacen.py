@@ -59,7 +59,30 @@ class interfaz(wx.Frame):
         self.ctrl_buscar.SetValue('Buscar...')
         self.sizer.Add(self.ctrl_buscar, pos=(2, 1),span=wx.DefaultSpan, flag=wx.ALIGN_CENTER)
         
-        self.categoria =  ["electricidad","neumatica"]
+        recibir_inventario = requests.get('http://0.0.0.0:8000/inventario_recibir')
+        list_recibir_inventario = list(recibir_inventario.json())
+        print(list_recibir_inventario)
+        list_categorias = []
+        list_dict_inventario = [dict(dict_inventario) for dict_inventario in list_recibir_inventario]
+        print(list_dict_inventario)
+        igual_categoria = False
+        for i in range(0,len(list_dict_inventario)):    
+            if i != 0:
+                id_list = list_dict_inventario[i]
+                nom_categoria = id_list['categoria']
+                print(nom_categoria)
+                dict_item_inventario = list_dict_inventario[i-1]
+                if nom_categoria != dict_item_inventario['categoria']:
+                    for l in range(0,len(list_categorias)):
+                        if nom_categoria == list_categorias[l]:
+                            igual_categoria = True
+                            print(igual_categoria)
+                    if igual_categoria == False:
+                        list_categorias.append(nom_categoria)                       
+        print(f'La lista de categorias es: {list_categorias}')
+        print(len(list_dict_inventario))
+                
+        self.categoria =  list_categorias
         self.cbbox_categoria = wx.ComboBox(self,-1,choices= self.categoria,size=(120,30))
         self.Bind(wx.EVT_COMBOBOX, self.OnSelect)
         self.sizer.Add(self.cbbox_categoria, pos=(12, 1),span=wx.DefaultSpan, flag=wx.ALIGN_CENTER)
@@ -164,19 +187,29 @@ class interfaz(wx.Frame):
     
     def OnSelect(self,event):
         self.categoria_sel = self.cbbox_categoria.GetValue()
-        if self.categoria_sel == 'electricidad':
+        recibir_inventario = requests.get('http://0.0.0.0:8000/inventario_recibir')
+        json_recibir_inventario = recibir_inventario.json()
+        list_json_inventario = [dict(id_item) for id_item in json_recibir_inventario]
+        list_mostrar = []
+        for i in range(0,len(list_json_inventario)):
+            dict_list_json_inventario = list_json_inventario[i]
+            if self.categoria_sel == dict_list_json_inventario['categoria']:
+                list_mostrar.append(dict_list_json_inventario)
+        self.resultado.SetObjects(list_mostrar)
+        '''
+        if self.categoria_sel == 'Electricidad':
             muestra_electricidad = requests.get('http://0.0.0.0:8000/electricidad_mostrar')
             list_muestra_electricidad = muestra_electricidad.json()
             print(list_muestra_electricidad)
             list_separada_electricidad = [i for i in list_muestra_electricidad[1:]]
             self.resultado.SetObjects(list_separada_electricidad)
-        if self.categoria_sel == 'neumatica':
+        if self.categoria_sel == 'Neumatica':
             muestra_neumatica = requests.get('http://0.0.0.0:8000/neumatica_mostrar')
             list_muestra_neumatica = muestra_neumatica.json()
             print(list_muestra_neumatica)
             list_separada_neumatica = [i for i in list_muestra_neumatica[1:]]
             self.resultado.SetObjects(list_separada_neumatica)
-        
+        '''
     def OnEnterPressedBuscar(self,event):
         self.busqueda = self.ctrl_buscar.GetValue() 
         print(f'Se ha buscado {self.busqueda}')
@@ -227,21 +260,51 @@ class interfaz(wx.Frame):
 
 
         if self.n_pulsado_nuevo == 2:
-            nuevo_item= {
+            nuevo_item = {
                 'codigo':str(self.ctrl_codigo.GetValue()),
                 'categoria':str(self.ctrl_categoria.GetValue()),
                 'modelo': str(self.ctrl_modelo.GetValue()),
                 'stock': str(self.ctrl_stock.GetValue()),
                 'fecha': str(self.ctrl_fecha.GetValue())
             }
-            requests.post('http://0.0.0.0:8000/inventario', data=json.dumps(nuevo_item))
+            respuesta_nuevo_item = requests.post('http://0.0.0.0:8000/inventario', data=json.dumps(nuevo_item))
             self.n_pulsado_nuevo = 0
-            
             print('Nuevo item enviado a Inventario')
-
-        
-        
-
+            print(respuesta_nuevo_item)
+            if str(respuesta_nuevo_item) == '<Response [200]>':
+                self.ctrl_codigo.SetValue('Insertado OK')
+                self.ctrl_categoria.SetValue(' ')
+                self.ctrl_modelo.SetValue(' ')
+                self.ctrl_stock.SetValue(' ')
+                self.ctrl_fecha.SetValue(' ')
+            else:
+                self.ctrl_categoria.SetValue('Fallo envio server')
+                self.ctrl_codigo.SetValue(' ')
+                self.ctrl_modelo.SetValue(' ')
+                self.ctrl_stock.SetValue(' ')
+                self.ctrl_fecha.SetValue(' ')
+            '''
+            recibir_inventario = requests.get('http://0.0.0.0:8000/inventario_recibir')
+            list_recibir_inventario = list(recibir_inventario.json())
+            list_categorias = []
+            list_dict_inventario = [dict(dict_inventario) for dict_inventario in list_recibir_inventario]
+            igual_categoria = False
+            for i in range(0,len(list_dict_inventario)):    
+                if i != 0:
+                    id_list = list_dict_inventario[i]
+                    nom_categoria = id_list['categoria']
+                    dict_item_inventario = list_dict_inventario[i-1]
+                    if nom_categoria != dict_item_inventario['categoria']:
+                        for l in range(0,len(list_categorias)):
+                            if nom_categoria == list_categorias[l]:
+                                igual_categoria = True  
+                        if igual_categoria == False:
+                            list_categorias.append(nom_categoria)                       
+            print(f'La lista de categorias es: {list_categorias}')
+                    
+            self.categoria =  list_categorias
+            self.cbbox_categoria = wx.ComboBox(self,-1,choices= self.categoria,size=(120,30))
+            '''
 
 
 
