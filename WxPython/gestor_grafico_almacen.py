@@ -9,6 +9,7 @@ class interfaz(wx.Frame):
     categoria_sel : str = 'vacio_0000'
     busqueda_codigo : str = 'vacio_0000'
     
+    
 
     def __init__(self, *args, **kw):
         super(interfaz, self).__init__(*args, **kw)
@@ -16,6 +17,7 @@ class interfaz(wx.Frame):
         
         self.InitUI()
         self.Centre()
+        
 
     def InitUI(self):
 
@@ -59,28 +61,29 @@ class interfaz(wx.Frame):
         self.ctrl_buscar.SetValue('Buscar...')
         self.sizer.Add(self.ctrl_buscar, pos=(2, 1),span=wx.DefaultSpan, flag=wx.ALIGN_CENTER)
         
+        
         recibir_inventario = requests.get('http://0.0.0.0:8000/inventario_recibir')
         list_recibir_inventario = list(recibir_inventario.json())
         print(list_recibir_inventario)
-        list_categorias = []
         list_dict_inventario = [dict(dict_inventario) for dict_inventario in list_recibir_inventario]
         print(list_dict_inventario)
-        igual_categoria = False
-        for i in range(0,len(list_dict_inventario)):    
-            if i != 0:
-                id_list = list_dict_inventario[i]
-                nom_categoria = id_list['categoria']
-                print(nom_categoria)
-                dict_item_inventario = list_dict_inventario[i-1]
-                if nom_categoria != dict_item_inventario['categoria']:
+        list_categorias = []
+        for i in range(1,len(list_dict_inventario)):    
+            id_item = list_dict_inventario[i]
+            id_item_anterior = list_dict_inventario[i-1]
+            if len(list_categorias)>0:
+                if id_item_anterior['categoria'] != id_item['categoria']:
+                    n_list_categorias = 0
                     for l in range(0,len(list_categorias)):
-                        if nom_categoria == list_categorias[l]:
-                            igual_categoria = True
-                            print(igual_categoria)
-                    if igual_categoria == False:
-                        list_categorias.append(nom_categoria)                       
-        print(f'La lista de categorias es: {list_categorias}')
-        print(len(list_dict_inventario))
+                        if id_item['categoria'] != list_categorias[l]:
+                            n_list_categorias += 1                          
+                    if n_list_categorias == len(list_categorias):
+                        list_categorias.append(id_item['categoria'])
+            if len(list_categorias) == 0:
+                    list_categorias.append(id_item['categoria'])    
+        print(f'La lista de categorias es: {list_categorias} ')
+        
+        
                 
         self.categoria =  list_categorias
         self.cbbox_categoria = wx.ComboBox(self,-1,choices= self.categoria,size=(120,30))
@@ -88,11 +91,11 @@ class interfaz(wx.Frame):
         self.sizer.Add(self.cbbox_categoria, pos=(12, 1),span=wx.DefaultSpan, flag=wx.ALIGN_CENTER)
 
         #self.resultado = wx.ListCtrl(self.pnl,-1, style = wx.LC_REPORT)
-        self.resultado = ObjectListView(self.pnl, wx.ID_ANY, style=wx.LC_REPORT|wx.SUNKEN_BORDER)
+        self.resultado = ObjectListView(self.pnl, wx.ID_ANY, style=wx.LC_REPORT|wx.SUNKEN_BORDER,size=(600,400))
         self.resultado.SetColumns([
-                ColumnDefn("Codigo", "left", 90,"codigo"),
+                ColumnDefn("Codigo", "center", 90,"codigo"),
                 ColumnDefn("Categoria", "center", 100,"categoria"),
-                ColumnDefn("Modelo", "left", 200,"modelo"),
+                ColumnDefn("Modelo", "center", 200,"modelo"),
                 ColumnDefn("Stock", "center", 90,"stock"),
                 ColumnDefn("Fecha", "center", 100,"fecha")
             ])
@@ -176,8 +179,6 @@ class interfaz(wx.Frame):
         self.SetSizerAndFit(self.sizer)
         
         
-                                   
-    
 
     def OnClose(self,e):                                
         self.Close(True)
@@ -196,20 +197,7 @@ class interfaz(wx.Frame):
             if self.categoria_sel == dict_list_json_inventario['categoria']:
                 list_mostrar.append(dict_list_json_inventario)
         self.resultado.SetObjects(list_mostrar)
-        '''
-        if self.categoria_sel == 'Electricidad':
-            muestra_electricidad = requests.get('http://0.0.0.0:8000/electricidad_mostrar')
-            list_muestra_electricidad = muestra_electricidad.json()
-            print(list_muestra_electricidad)
-            list_separada_electricidad = [i for i in list_muestra_electricidad[1:]]
-            self.resultado.SetObjects(list_separada_electricidad)
-        if self.categoria_sel == 'Neumatica':
-            muestra_neumatica = requests.get('http://0.0.0.0:8000/neumatica_mostrar')
-            list_muestra_neumatica = muestra_neumatica.json()
-            print(list_muestra_neumatica)
-            list_separada_neumatica = [i for i in list_muestra_neumatica[1:]]
-            self.resultado.SetObjects(list_separada_neumatica)
-        '''
+        
     def OnEnterPressedBuscar(self,event):
         self.busqueda = self.ctrl_buscar.GetValue() 
         print(f'Se ha buscado {self.busqueda}')
@@ -283,28 +271,31 @@ class interfaz(wx.Frame):
                 self.ctrl_modelo.SetValue(' ')
                 self.ctrl_stock.SetValue(' ')
                 self.ctrl_fecha.SetValue(' ')
-            '''
+            
             recibir_inventario = requests.get('http://0.0.0.0:8000/inventario_recibir')
             list_recibir_inventario = list(recibir_inventario.json())
-            list_categorias = []
+            print(list_recibir_inventario)
             list_dict_inventario = [dict(dict_inventario) for dict_inventario in list_recibir_inventario]
-            igual_categoria = False
-            for i in range(0,len(list_dict_inventario)):    
-                if i != 0:
-                    id_list = list_dict_inventario[i]
-                    nom_categoria = id_list['categoria']
-                    dict_item_inventario = list_dict_inventario[i-1]
-                    if nom_categoria != dict_item_inventario['categoria']:
-                        for l in range(0,len(list_categorias)):
-                            if nom_categoria == list_categorias[l]:
-                                igual_categoria = True  
-                        if igual_categoria == False:
-                            list_categorias.append(nom_categoria)                       
-            print(f'La lista de categorias es: {list_categorias}')
-                    
-            self.categoria =  list_categorias
-            self.cbbox_categoria = wx.ComboBox(self,-1,choices= self.categoria,size=(120,30))
-            '''
+            print(list_dict_inventario)
+            nueva_list_categorias = []
+            for i in range(1,len(list_dict_inventario)):    
+                id_item = list_dict_inventario[i]
+                id_item_anterior = list_dict_inventario[i-1]
+                if len(nueva_list_categorias)>0:
+                    if id_item_anterior['categoria'] != id_item['categoria']:
+                        n_nueva_list_categorias = 0
+                        for l in range(0,len(nueva_list_categorias)):
+                            if id_item['categoria'] != nueva_list_categorias[l]:
+                                n_nueva_list_categorias += 1                          
+                        if n_nueva_list_categorias == len(nueva_list_categorias):
+                            nueva_list_categorias.append(id_item['categoria'])
+                if len(nueva_list_categorias) == 0:
+                        nueva_list_categorias.append(id_item['categoria'])    
+            print(f'La nueva lista de categorias es: {nueva_list_categorias} ')
+            nueva_categoria = nueva_list_categorias[len(nueva_list_categorias)-1]
+            print(f'La nueva categoria es: {nueva_categoria}')           
+            self.cbbox_categoria.SetValue(nueva_categoria)
+            
 
 
 
