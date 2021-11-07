@@ -14,6 +14,7 @@ class Datos(BaseModel):
     modelo: str
     stock: str
     fecha: str
+    precio: str
 
 class Paquete(BaseModel):                             
     busc: str 
@@ -88,7 +89,8 @@ def post_inventario(Nuevo_item: Datos):
         categoria = Nuevo_item.categoria,
         modelo = Nuevo_item.modelo,
         stock = Nuevo_item.stock,
-        fecha = Nuevo_item.fecha
+        fecha = Nuevo_item.fecha,
+        precio = Nuevo_item.precio
 
     )
     conexion.insertar_inventario(dict_nuevo_item)
