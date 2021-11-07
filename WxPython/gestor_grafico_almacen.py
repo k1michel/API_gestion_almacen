@@ -293,8 +293,11 @@ class interfaz(wx.Frame):
                         nueva_list_categorias.append(id_item['categoria'])    
             print(f'La nueva lista de categorias es: {nueva_list_categorias} ')
             nueva_categoria = nueva_list_categorias[len(nueva_list_categorias)-1]
-            print(f'La nueva categoria es: {nueva_categoria}')           
-            self.cbbox_categoria.SetValue(nueva_categoria)
+            print(f'La nueva categoria es: {nueva_categoria}')
+            self.cbbox_categoria.Append(nueva_categoria)
+            self.cbbox_categoria.Refresh()
+                     
+            
             
 
 
