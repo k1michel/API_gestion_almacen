@@ -186,7 +186,7 @@ class interfaz(wx.Frame):
         self.logo2= wx.StaticBitmap(self.pnl, -1, self.imagen1)
         self.sizer.Add(self.logo2, pos=(0, 2),span=wx.DefaultSpan, flag=wx.ALIGN_CENTER)
 
-        self.txt_copyright= wx.StaticText(self.pnl, label= 'Copyright 2021 | All Rights Reservers | Software by Michel Alvarez')
+        self.txt_copyright= wx.StaticText(self.pnl, label= 'Copyright 2021 | All Rights Reserved | Software by Michel Alvarez')
         self.txt_fecha.SetFont(wx.Font(10, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False))
         self.sizer.Add(self.txt_copyright, pos=(16, 1),span=wx.DefaultSpan, flag=wx.ALIGN_CENTER)
 
@@ -290,7 +290,7 @@ class interfaz(wx.Frame):
                 self.ctrl_modelo.SetValue(' ')
                 self.ctrl_stock.SetValue(' ')
                 self.ctrl_fecha.SetValue(' ')
-                self.ctrl_precio.SetValue('')
+                self.ctrl_precio.SetValue(' ')
             
             recibir_inventario = requests.get('http://0.0.0.0:8000/inventario_recibir')
             list_recibir_inventario = list(recibir_inventario.json())
