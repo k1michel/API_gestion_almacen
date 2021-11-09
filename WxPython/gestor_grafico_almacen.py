@@ -30,6 +30,7 @@ class interfaz(wx.Frame):
         
         #Variables
         self.n_pulsado_nuevo = 0
+        self.n_pulsado_modificar = 0
         self.ip_server = 'http://0.0.0.0:8000/'
         self.primer_ciclo_categorias = False
         self.nueva_list_categorias_antigua = []
@@ -231,23 +232,57 @@ class interfaz(wx.Frame):
         data_list_recibir_busqueda=list_recibir_busqueda.json()
         print(data_list_recibir_busqueda)
         if data_list_recibir_busqueda[0]['busc'] != 'vacio_0000':
-            dict_recibir_busqueda = data_list_recibir_busqueda[1]
-            self.ctrl_codigo.SetValue(dict_recibir_busqueda['codigo'])
-            self.ctrl_categoria.SetValue(dict_recibir_busqueda['categoria'])
-            self.ctrl_modelo.SetValue(dict_recibir_busqueda['modelo'])
-            self.ctrl_stock.SetValue(str(dict_recibir_busqueda['stock']))
-            self.ctrl_fecha.SetValue(dict_recibir_busqueda['fecha'])
-            self.ctrl_precio.SetValue(dict_recibir_busqueda['precio'])
+            self.dict_recibir_busqueda = data_list_recibir_busqueda[1]
+            self.ctrl_codigo.SetValue(self.dict_recibir_busqueda['codigo'])
+            self.ctrl_categoria.SetValue(self.dict_recibir_busqueda['categoria'])
+            self.ctrl_modelo.SetValue(self.dict_recibir_busqueda['modelo'])
+            self.ctrl_stock.SetValue(str(self.dict_recibir_busqueda['stock']))
+            self.ctrl_fecha.SetValue(self.dict_recibir_busqueda['fecha'])
+            self.ctrl_precio.SetValue(self.dict_recibir_busqueda['precio'])
     def OnEnterPressedCodigo(self,event):
         print('Se ha introducido codigo para buscar')
         self.busqueda_codigo = self.ctrl_buscar_codigo.GetValue()
-        print(f'Busqueda codigo -> {self.busqueda_codigo}\n')
         self.enviar(True)
         
+
+
         
 
     def OnClickedModificar(self,event):
         print('Se ha pulsado boton Modificar')
+        self.n_pulsado_modificar += 1
+        if self.n_pulsado_modificar == 1:
+
+            self.busqueda_codigo = self.ctrl_codigo.GetValue()
+            print(f'Busqueda codigo -> {self.busqueda_codigo}\n')
+            self.enviar(True)
+            id_modificar = {
+                "id_modificar": str(self.dict_recibir_busqueda['id'])
+            }
+            print(id_modificar)
+            requests.post('http://0.0.0.0:8000/modificar', data= json.dumps(id_modificar))
+            print('Esperando modificacion')
+            self.modificarButton.SetBackgroundColour(wx.Colour(150,0,0))
+
+        if self.n_pulsado_modificar == 2:
+            nuevo_item = {
+                    'codigo':str(self.ctrl_codigo.GetValue()),
+                    'categoria':str(self.ctrl_categoria.GetValue()),
+                    'modelo': str(self.ctrl_modelo.GetValue()),
+                    'stock': str(self.ctrl_stock.GetValue()),
+                    'fecha': str(self.ctrl_fecha.GetValue()),
+                    'precio':str(self.ctrl_precio.GetValue())
+                }
+            respuesta_nuevo_item = requests.post('http://0.0.0.0:8000/inventario', data=json.dumps(nuevo_item))
+        
+            if str(respuesta_nuevo_item) == '<Response [200]>':
+                    self.ctrl_codigo.SetValue('Modificar OK')
+                    self.ctrl_categoria.SetValue(' ')
+                    self.ctrl_modelo.SetValue(' ')
+                    self.ctrl_stock.SetValue(' ')
+                    self.ctrl_fecha.SetValue(' ')
+                    self.ctrl_precio.SetValue('')
+                    self.modificarButton.SetBackgroundColour(wx.Colour(0,0,0))
 
     
 
@@ -276,7 +311,7 @@ class interfaz(wx.Frame):
             respuesta_nuevo_item = requests.post('http://0.0.0.0:8000/inventario', data=json.dumps(nuevo_item))
             self.n_pulsado_nuevo = 0
             print('Nuevo item enviado a Inventario')
-            print(respuesta_nuevo_item)
+            
             if str(respuesta_nuevo_item) == '<Response [200]>':
                 self.ctrl_codigo.SetValue('Insertado OK')
                 self.ctrl_categoria.SetValue(' ')
@@ -294,9 +329,7 @@ class interfaz(wx.Frame):
             
             recibir_inventario = requests.get('http://0.0.0.0:8000/inventario_recibir')
             list_recibir_inventario = list(recibir_inventario.json())
-            print(list_recibir_inventario)
             list_dict_inventario = [dict(dict_inventario) for dict_inventario in list_recibir_inventario]
-            print(list_dict_inventario)
             nueva_list_categorias = []
             for i in range(1,len(list_dict_inventario)):    
                 id_item = list_dict_inventario[i]

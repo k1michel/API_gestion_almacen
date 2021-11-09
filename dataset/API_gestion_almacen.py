@@ -19,6 +19,13 @@ class Datos(BaseModel):
 class Paquete(BaseModel):                             
     busc: str 
 
+class Modificado(BaseModel):
+    id_modificar : str
+
+class Categoria_borrar(BaseModel):
+    categoria_delete : str
+
+
 almacen = FastAPI() 
 
 conexion = Conexion()
@@ -46,41 +53,6 @@ def delete_envios():
     conexion.eliminar_envios()
     return 'Eliminado completo Envios OK'
 
-@almacen.get("/electricidad")  
-def get_electricidad():
-    return conexion.mostrar_electricidad()
-
-@almacen.get("/neumatica")  
-def get_neumatica():
-    return conexion.mostrar_neumatica()
-
-@almacen.post("/electricidad")
-def post_electricidad():
-    conexion.insertar_electricidad()
-    return 'Insertados en Electricidad OK'
-
-@almacen.get("/electricidad_mostrar")
-def post_electricidad_mostrar():
-    return conexion.mostrar_electricidad()
-
-@almacen.post("/neumatica")
-def post_neumatica():
-    conexion.insertar_neumatica()
-    return 'Insertados en Neumatica OK'
-
-@almacen.get("/neumatica_mostrar")
-def post_electricidad_mostrar():
-    return conexion.mostrar_neumatica()
-
-@almacen.delete("/electricidad")
-def delete_electricidad():
-    conexion.eliminar_electricidad()
-    return 'Eliminado completo Electricidad OK'
-
-@almacen.delete("/neumatica")
-def delete_neumatica():
-    conexion.eliminar_neumatica()
-    return 'Eliminado completo Neumatica OK'
 
 @almacen.post("/inventario")
 def post_inventario(Nuevo_item: Datos):
@@ -109,6 +81,21 @@ def delete_inventario():
 def get_recibir_inventario():
     return conexion.mostrar_inventario()
 
+@almacen.post("/modificar")
+def delete_modificar(modificado: Modificado):
+    dict_modificado = dict(
+        id_modificar = modificado.id_modificar
+    )
+    conexion.borrar_modificado(dict_modificado)
+    return 'Borrado de modificar OK'
+
+@almacen.delete("/categoria_borrar")
+def delete_categoria(borrar_categoria: Categoria_borrar):
+    dict_borrar_categoria=dict(
+        categoria_delete = borrar_categoria.categoria_delete
+    )
+    conexion.borrar_categoria(dict_borrar_categoria)
+    return 'Borrada la categoria OK'
 
 if __name__ == "__main__":  # si el nombre del script que se esta ejecutando es main realiza lo siguiente
     
