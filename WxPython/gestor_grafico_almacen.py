@@ -2,6 +2,7 @@ import wx
 import requests
 import json
 from time import sleep
+from datetime import datetime
 from ObjectListView import ObjectListView, ColumnDefn
 
 
@@ -34,16 +35,21 @@ class interfaz(wx.Frame):
         self.ip_server = 'http://0.0.0.0:8000/'
         self.primer_ciclo_categorias = False
         self.nueva_list_categorias_antigua = []
+        
 
         self.sizer = wx.GridBagSizer(17,5)
         
 
         ## Titulo
+        '''
         self.fuente_titulo = wx.Font(20, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False)
         self.titulo= wx.StaticText(self.pnl, label= 'GESTOR ALMACEN')
         self.titulo.SetFont(self.fuente_titulo)
         self.titulo.SetForegroundColour(wx.Colour(0,0,0))
-        self.sizer.Add(self.titulo, pos=(0, 1),span=wx.DefaultSpan, flag=wx.ALIGN_CENTER)
+        '''
+        self.imagen_titulo = wx.Image('Letras_gestor_almacen_1.png', wx.BITMAP_TYPE_PNG).Rescale(500, 100).ConvertToBitmap() 
+        self.titulo_1= wx.StaticBitmap(self.pnl, -1, self.imagen_titulo)
+        self.sizer.Add(self.titulo_1, pos=(0, 1),span=wx.DefaultSpan, flag=wx.ALIGN_CENTER)
         
         ### Boton Cerrar ###
         '''
@@ -176,6 +182,7 @@ class interfaz(wx.Frame):
         self.nuevoButton.SetForegroundColour(wx.Colour(255,255,255))
         self.sizer.Add(self.nuevoButton, pos=(11, 1),span=wx.DefaultSpan, flag=wx.ALIGN_CENTRE)
 
+        '''
         #LogoS
         self.imagen1 = wx.Image('Logo_almacen_2.png', wx.BITMAP_TYPE_PNG).Rescale(100, 100).ConvertToBitmap() 
         
@@ -186,15 +193,17 @@ class interfaz(wx.Frame):
         
         self.logo2= wx.StaticBitmap(self.pnl, -1, self.imagen1)
         self.sizer.Add(self.logo2, pos=(0, 2),span=wx.DefaultSpan, flag=wx.ALIGN_CENTER)
-
+        '''
+            
         self.txt_copyright= wx.StaticText(self.pnl, label= 'Copyright 2021 | All Rights Reserved | Software by Michel Alvarez')
         self.txt_fecha.SetFont(wx.Font(10, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False))
         self.sizer.Add(self.txt_copyright, pos=(16, 1),span=wx.DefaultSpan, flag=wx.ALIGN_CENTER)
+        
 
         #self.sizer.AddGrowableCol(4)
         self.SetSizerAndFit(self.sizer)
         
-        
+    
 
     def OnClose(self,e):                                
         self.Close(True)
@@ -245,7 +254,11 @@ class interfaz(wx.Frame):
         self.enviar(True)
         
 
-
+    def fecha_actual(self,e):
+        ahora = datetime.now()
+        formato = "%Y-%m-%d_%H:%M:%S"
+        fecha_hora_actual = ahora.strftime(formato)
+        return fecha_hora_actual
         
 
     def OnClickedModificar(self,event):
@@ -263,14 +276,15 @@ class interfaz(wx.Frame):
             requests.post('http://0.0.0.0:8000/modificar', data= json.dumps(id_modificar))
             print('Esperando modificacion')
             self.modificarButton.SetBackgroundColour(wx.Colour(150,0,0))
-
+            self.ctrl_fecha.SetValue('Automatica')
         if self.n_pulsado_modificar == 2:
+            fecha_now = self.fecha_actual(True)
             nuevo_item = {
                     'codigo':str(self.ctrl_codigo.GetValue()),
                     'categoria':str(self.ctrl_categoria.GetValue()),
                     'modelo': str(self.ctrl_modelo.GetValue()),
                     'stock': str(self.ctrl_stock.GetValue()),
-                    'fecha': str(self.ctrl_fecha.GetValue()),
+                    'fecha': fecha_now,
                     'precio':str(self.ctrl_precio.GetValue())
                 }
             respuesta_nuevo_item = requests.post('http://0.0.0.0:8000/inventario', data=json.dumps(nuevo_item))
@@ -294,18 +308,19 @@ class interfaz(wx.Frame):
             self.ctrl_categoria.SetValue('-> Categoria nuevo...')
             self.ctrl_modelo.SetValue('-> Modelo nuevo...')
             self.ctrl_stock.SetValue('-> Stock nuevo...')
-            self.ctrl_fecha.SetValue('-> Fecha nuevo...')
+            self.ctrl_fecha.SetValue('Automatica')
             self.ctrl_precio.SetValue('-> Precio nuevo...')
             print('Esperando datos para el envio...')
 
 
         if self.n_pulsado_nuevo == 2:
+            fecha_now = self.fecha_actual(True)
             nuevo_item = {
                 'codigo':str(self.ctrl_codigo.GetValue()),
                 'categoria':str(self.ctrl_categoria.GetValue()),
                 'modelo': str(self.ctrl_modelo.GetValue()),
                 'stock': str(self.ctrl_stock.GetValue()),
-                'fecha': str(self.ctrl_fecha.GetValue()),
+                'fecha': fecha_now,
                 'precio':str(self.ctrl_precio.GetValue())
             }
             respuesta_nuevo_item = requests.post('http://0.0.0.0:8000/inventario', data=json.dumps(nuevo_item))
