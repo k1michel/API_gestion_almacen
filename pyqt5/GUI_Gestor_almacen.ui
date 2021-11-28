@@ -299,6 +299,9 @@
       <height>22</height>
      </rect>
     </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(0, 0, 0);</string>
+    </property>
    </widget>
    <widget class="QLabel" name="txt_buscar_codigo">
     <property name="geometry">
@@ -329,6 +332,9 @@
       <width>121</width>
       <height>22</height>
      </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(0, 0, 0);</string>
     </property>
    </widget>
    <widget class="Line" name="line_2">
@@ -425,6 +431,9 @@
       <height>22</height>
      </rect>
     </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(0, 0, 0);</string>
+    </property>
    </widget>
    <widget class="QLabel" name="txt_categoria">
     <property name="geometry">
@@ -455,6 +464,9 @@
       <width>161</width>
       <height>22</height>
      </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(0, 0, 0);</string>
     </property>
    </widget>
    <widget class="QLabel" name="txt_modelo">
@@ -487,6 +499,9 @@
       <height>51</height>
      </rect>
     </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(0, 0, 0);</string>
+    </property>
    </widget>
    <widget class="QLabel" name="txt_stock">
     <property name="geometry">
@@ -517,6 +532,9 @@
       <width>71</width>
       <height>22</height>
      </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(0, 0, 0);</string>
     </property>
    </widget>
    <widget class="QLabel" name="txt_fecha">
@@ -549,6 +567,9 @@
       <height>22</height>
      </rect>
     </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(0, 0, 0);</string>
+    </property>
    </widget>
    <widget class="QLabel" name="txt_precio">
     <property name="geometry">
@@ -580,6 +601,9 @@
       <height>22</height>
      </rect>
     </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(0, 0, 0);</string>
+    </property>
    </widget>
    <widget class="QTableView" name="ctrl_resultado">
     <property name="geometry">
@@ -590,6 +614,9 @@
       <height>641</height>
      </rect>
     </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(0, 0, 0);</string>
+    </property>
    </widget>
    <widget class="QLineEdit" name="ctrl_mensaje">
     <property name="geometry">
@@ -599,6 +626,9 @@
       <width>271</width>
       <height>51</height>
      </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(0, 0, 0);</string>
     </property>
    </widget>
    <widget class="QLabel" name="txt_mensaje">
@@ -2146,6 +2176,9 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
       <height>22</height>
      </rect>
     </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(0, 0, 0);</string>
+    </property>
    </widget>
    <widget class="QLabel" name="txt_precio_minimo">
     <property name="geometry">
@@ -2196,6 +2229,9 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
       <height>22</height>
      </rect>
     </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(0, 0, 0);</string>
+    </property>
    </widget>
    <widget class="QLabel" name="txt_categorias">
     <property name="geometry">
@@ -2226,6 +2262,9 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
       <width>141</width>
       <height>22</height>
      </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(0, 0, 0);</string>
     </property>
    </widget>
    <widget class="Line" name="line_3">
