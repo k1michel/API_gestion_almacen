@@ -2141,7 +2141,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
      <string>NUEVO</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="ctrl_precio_minimo">
+   <widget class="QLineEdit" name="ctrl_precio_min">
     <property name="geometry">
      <rect>
       <x>370</x>
@@ -2194,7 +2194,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
      <string>Maximo</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit">
+   <widget class="QLineEdit" name="ctrl_precio_max">
     <property name="geometry">
      <rect>
       <x>510</x>

@@ -12,9 +12,11 @@ class Datos(BaseModel):
     codigo: str                     
     categoria: str  
     modelo: str
-    stock: str
+    stock: int
     fecha: str
-    precio: str
+    precio: float
+    precio_min: list
+    precio_max: list
 
 class Paquete(BaseModel):                             
     busc: str 
