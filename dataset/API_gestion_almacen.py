@@ -15,8 +15,8 @@ class Datos(BaseModel):
     stock: int
     fecha: str
     precio: float
-    precio_min: list
-    precio_max: list
+    precio_min: float
+    precio_max: float
 
 class Paquete(BaseModel):                             
     busc: str 
@@ -64,7 +64,9 @@ def post_inventario(Nuevo_item: Datos):
         modelo = Nuevo_item.modelo,
         stock = Nuevo_item.stock,
         fecha = Nuevo_item.fecha,
-        precio = Nuevo_item.precio
+        precio = Nuevo_item.precio,
+        precio_min = Nuevo_item.precio_min,
+        precio_max = Nuevo_item.precio_max
 
     )
     conexion.insertar_inventario(dict_nuevo_item)

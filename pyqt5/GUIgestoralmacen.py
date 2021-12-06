@@ -73,6 +73,10 @@ class gui_gestor_almacen(QMainWindow):
         self.n_pulsado_modificar = 0
         self.primer_ciclo_categorias = False
         self.nueva_list_categorias_antigua = []
+        self.precio_min_definitivo = float
+        self.precio_max_definitivo = float
+        self.precio_medio = float
+        self.historial_precios = []
 
         ######################################################
     def enviar(self):
@@ -158,8 +162,6 @@ class gui_gestor_almacen(QMainWindow):
         self.tabla_resultado.setHorizontalHeaderLabels(['Codigo','Categoria','Modelo','Stock','Ultima Modificacion', 'Precio','Precio min','Precio max'])
         for n, key in enumerate(self.data_categoria.keys()):
             for m, item in enumerate(self.data_categoria[key]):
-                #newitem = QTableWidgetItem(item)
-                #self.setItem(m, n, newitem)
                 self.tabla_resultado.setItem(m,n,QTableWidgetItem(item))
         self.tabla_resultado.verticalHeader().setDefaultSectionSize(80)
         
@@ -169,15 +171,26 @@ class gui_gestor_almacen(QMainWindow):
         fecha_hora_actual = ahora.strftime(formato)
         return fecha_hora_actual
         
-    def actualizar_precios_medio(self,codigo):
-        
-        aux_precio_min = 
-        aux_precio_max = 
+    def actualizar_precios_medio(self,dict_busqueda):
+        aux_precios = list
+        aux_precios = dict_busqueda['precio_min'].append(dict_busqueda['precio'])        
+        self.historial_precios.append(aux_precios)
+        self.precio_min_definitivo = min(self.historial_precios)
+        self.precio_max_definitivo = max(self.historial_precios)
+        suma=0
+        for s in range(0,len(self.historial_precios[0])):
+            suma = self.historial_precios[0][s] + suma
+        self.precio_medio = round(suma/len(aux_precio_min),2)
+           
+            
+
+         
 
 
 
 
     def OnClickedModificar(self):
+        self.ctrl_mensaje.clear()
         print('Se ha pulsado boton Modificar')
         self.n_pulsado_modificar += 1
         if self.n_pulsado_modificar == 1:
@@ -198,32 +211,57 @@ class gui_gestor_almacen(QMainWindow):
         if self.n_pulsado_modificar == 2:
             fecha_now = self.fecha_actual()
             nuevo_item = {
-                    'codigo':str(self.ctrl_codigo.text()),
-                    'categoria':str(self.ctrl_categoria.text()),
-                    'modelo': str(self.ctrl_modelo.text()),
-                    'stock': str(self.ctrl_stock.text()),
-                    'fecha': fecha_now,
-                    'precio':str(self.ctrl_precio.text()),
-                    'precio_min': None,
-                    'precio_max': None
+                'codigo':str(self.ctrl_codigo.text()),
+                'categoria':str(self.ctrl_categoria.text()),
+                'modelo': str(self.ctrl_modelo.text()),
+                'stock': str(self.ctrl_stock.text()),
+                'fecha': fecha_now,
+                'precio':str(self.ctrl_precio.text()),
+                'precio_min': None,
+                'precio_max': None
                 }
-            respuesta_nuevo_item = requests.post('http://localhost:8000/inventario', data=json.dumps(nuevo_item))
+            requests.post('http://localhost:8000/inventario', data=json.dumps(nuevo_item))
+            self.enviar()
+            id_modificar = {
+                "id_modificar": str(self.dict_recibir_busqueda['id'])
+            }
+            self.actualizar_precios_medio(self.dict_recibir_busqueda)
+            nuevo_item_actualizado = {
+                'codigo': str(self.dict_recibir_busqueda['codigo']),
+                'categoria': str(self.dict_recibir_busqueda['categoria']),
+                'modelo': str(self.dict_recibir_busqueda['modelo']),
+                'stock': str(self.dict_recibir_busqueda['stock']),
+                'fecha': fecha_now,
+                'precio':self.precio_medio,
+                'precio_min': self.precio_min_definitivo,
+                'precio_max': self.precio_max_definitivo
+            }
+            requests.post('http://localhost:8000/modificar', data= json.dumps(id_modificar))
+            respuesta_nuevo_item_actualizado = requests.post('http://localhost:8000/inventario', data=json.dumps(nuevo_item_actualizado))
             self.n_pulsado_modificar = 0
-            if str(respuesta_nuevo_item) == '<Response [200]>':
-                    self.ctrl_codigo.setText('Modificar OK')
-                    self.ctrl_categoria.setText(' ')
-                    self.ctrl_modelo.setText(' ')
-                    self.ctrl_stock.setText(' ')
-                    self.ctrl_fecha.setText(' ')
-                    self.ctrl_precio.setText('')
-                    self.ctrl_precio_min.setText('')
-                    self.ctrl_precio_max.setText('')
-                    
-                    
-
+            if str(respuesta_nuevo_item_actualizado) == '<Response [200]>':
+                self.ctrl_mensaje.setText('Modificar OK')
+                self.ctrl_codigo.clear()
+                self.ctrl_categoria.clear()
+                self.ctrl_modelo.clear()
+                self.ctrl_stock.clear()
+                self.ctrl_fecha.clear()
+                self.ctrl_precio.clear()
+                self.ctrl_precio_min.clear()
+                self.ctrl_precio_max.clear()
+            else:
+                self.ctrl_mensaje.setText('Fallo server')
+                self.ctrl_codigo.clear()
+                self.ctrl_categoria.clear()
+                self.ctrl_modelo.clear()
+                self.ctrl_stock.clear()
+                self.ctrl_fecha.clear()
+                self.ctrl_precio.clear()
+                self.ctrl_precio_min.clear()
+                self.ctrl_precio_max.clear()     
     
-
     def OnClickedNuevo(self):        
+        self.ctrl_mensaje.clear()
         self.n_pulsado_nuevo += 1 
         if self.n_pulsado_nuevo == 1:
             
@@ -246,9 +284,9 @@ class gui_gestor_almacen(QMainWindow):
                 'modelo': str(self.ctrl_modelo.text()),
                 'stock': str(self.ctrl_stock.text()),
                 'fecha': fecha_now,
-                'precio':str(self.ctrl_precio.text()),
-                'precio_min': None,
-                'precio_max': None
+                'precio': round(float(self.ctrl_precio.text()),2),
+                'precio_min': [round(float(self.ctrl_precio.text()),2)],
+                'precio_max': [round(float(self.ctrl_precio.text()),2)]
 
             }
             respuesta_nuevo_item = requests.post('http://localhost:8000/inventario', data=json.dumps(nuevo_item))
@@ -256,23 +294,25 @@ class gui_gestor_almacen(QMainWindow):
             print('Nuevo item enviado a Inventario')
             
             if str(respuesta_nuevo_item) == '<Response [200]>':
-                self.ctrl_codigo.setText('Insertado OK')
-                self.ctrl_categoria.setText(' ')
-                self.ctrl_modelo.setText(' ')
-                self.ctrl_stock.setText(' ')
-                self.ctrl_fecha.setText(' ')
-                self.ctrl_precio.setText('')
-                self.ctrl_precio_min.setText('')
-                self.ctrl_precio_max.setText('')
+                self.ctrl_mensaje.setText('Insertado nuevo OK')
+                self.ctrl_codigo.clear()
+                self.ctrl_categoria.clear()
+                self.ctrl_modelo.clear()
+                self.ctrl_stock.clear()
+                self.ctrl_fecha.clear()
+                self.ctrl_precio.clear()
+                self.ctrl_precio_min.clear()
+                self.ctrl_precio_max.clear()
             else:
-                self.ctrl_categoria.setText('Fallo envio server')
-                self.ctrl_codigo.setText(' ')
-                self.ctrl_modelo.setText(' ')
-                self.ctrl_stock.setText(' ')
-                self.ctrl_fecha.setText(' ')
-                self.ctrl_precio.setText(' ')
-                self.ctrl_precio_min.setText('')
-                self.ctrl_precio_max.setText('')
+                self.ctrl_mensaje.setText('Fallo server')
+                self.ctrl_codigo.clear()
+                self.ctrl_categoria.clear()
+                self.ctrl_modelo.clear()
+                self.ctrl_stock.clear()
+                self.ctrl_fecha.clear()
+                self.ctrl_precio.clear()
+                self.ctrl_precio_min.clear()
+                self.ctrl_precio_max.clear()
             
             recibir_inventario = requests.get('http://localhost:8000/inventario_recibir')
             list_recibir_inventario = list(recibir_inventario.json())

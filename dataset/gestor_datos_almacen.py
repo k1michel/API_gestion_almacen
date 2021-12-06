@@ -2,10 +2,9 @@ import dataset
 
 class Conexion:
     fichero_sqlite: str = 'base_datos.db' 
-    electricidad = None
-    neumatica = None
+    inventario = None
     envios = None
-
+    historial_precios = None
 
     def __init__(self):
 
@@ -14,6 +13,7 @@ class Conexion:
         # creamos instancia q mediante dataset la conectamos con nuestro fichero de la base de datos
         self.envios = self.db['envios']
         self.inventario = self.db['inventario']
+        self.historial_precios = self.db['historial_precios']
     
     def insertar_envios(self,dic_paquete):
         return self.envios.insert(dic_paquete)
