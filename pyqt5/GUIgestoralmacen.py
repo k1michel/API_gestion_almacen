@@ -47,6 +47,11 @@ class gui_gestor_almacen(QMainWindow):
         self.ctrl_buscar_codigo.editingFinished.connect(self.OnEnterPressedCodigo)
         #################################################
 
+        ## BUSCAR MODELO ##
+
+        self.ctrl_busqueda_modelo.editingFinished.connect(self.OnPressed_Busqueda_modelo)
+        #################################################
+
         ## TABLA DE RESULTADOS ##
         self.tabla_resultado.setColumnCount(6)
         self.tabla_resultado.setRowCount(50)
@@ -271,6 +276,64 @@ class gui_gestor_almacen(QMainWindow):
             self.list_categorias.sort()
             self.cbbox_categorias.addItems(list_categorias)
             self.nueva_list_categorias_antigua = nueva_list_categorias
+
+    def OnPressed_Busqueda_modelo(self):
+        busqueda_modelos = self.ctrl_busqueda_modelo.text()
+        minus_busqueda_modelos = busqueda_modelos.lower()
+        recibir_inventario = requests.get('http://localhost:8000/inventario_recibir')
+        json_recibir_inventario = recibir_inventario.json()
+        list_json_inventario = [dict(id_item) for id_item in json_recibir_inventario]
+        list_modelos = []
+        
+        for i in range(0,len(list_json_inventario)):
+            dict_list_json_inventario = list_json_inventario[i]
+            list_dividido = []
+            list_dividido = dict_list_json_inventario['modelo'].lower().split()
+            #print(f'Lista dividida de modelo: {minus_busqueda_modelos} es {list_dividido}')
+            for d in range(0,len(list_dividido)):
+                if minus_busqueda_modelos == list_dividido[d]:
+                    list_modelos.append(dict_list_json_inventario)
+        print(f'La lista recibida de modelos "{minus_busqueda_modelos}" es:\n{list_modelos}')
+        codigo=[]
+        categoria=[]
+        modelo=[]
+        stock=[]
+        fecha=[]
+        precio=[]
+        for a in range (0,len(list_modelos)):
+            dict_mostrar = list_modelos[a]
+
+            item_codigo = dict_mostrar['codigo']
+            item_categoria = dict_mostrar['categoria']
+            item_modelo = dict_mostrar['modelo']
+            item_stock = dict_mostrar['stock']
+            item_fecha = dict_mostrar['fecha']
+            item_precio = dict_mostrar['precio'] 
+
+            codigo.append(item_codigo)            
+            categoria.append(item_categoria)
+            modelo.append(item_modelo)
+            stock.append(item_stock)
+            fecha.append(item_fecha)
+            precio.append(item_precio)
+
+        self.data_categoria = {
+            'Codigo': codigo,
+            'Categoria': categoria,
+            'Modelo':modelo,
+            'Stock':stock,
+            'Fecha':fecha,
+            'Precio':precio
+        }
+        #print(f'Los datos seleccionados son: {self.data_categoria}')
+        self.tabla_resultado.clear()
+        self.tabla_resultado.setHorizontalHeaderLabels(['Codigo','Categoria','Modelo','Stock','Ultima Modificacion', 'Precio'])
+        for n, key in enumerate(self.data_categoria.keys()):
+            for m, item in enumerate(self.data_categoria[key]):
+                #newitem = QTableWidgetItem(item)
+                #self.setItem(m, n, newitem)
+                self.tabla_resultado.setItem(m,n,QTableWidgetItem(item))
+        self.tabla_resultado.verticalHeader().setDefaultSectionSize(80)
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
