@@ -6,7 +6,7 @@ from threading import Thread
 from time import sleep
 import uvicorn
 from gestor_datos_almacen import Conexion
-
+from fastapi.responses import HTMLResponse
 
 class Datos(BaseModel):         
     codigo: str                     
@@ -96,6 +96,25 @@ def delete_categoria(borrar_categoria: Categoria_borrar):
     )
     conexion.borrar_categoria(dict_borrar_categoria)
     return 'Borrada la categoria OK'
+
+def generate_html_response():
+    html_content = """
+    <html>
+        <head>
+            <title>GESTOR DE ALMACEN</title>
+        </head>
+        <body>
+            <h1>BIENVENIDOS AL GESTOR DE ALMACEN</h1>
+            <h2>Todo esta correcto por aqui...<h2>
+        </body>
+    </html>
+    """
+    return HTMLResponse(content=html_content, status_code=200)
+
+
+@almacen.get("/", response_class=HTMLResponse)
+async def home():
+    return generate_html_response()
 
 if __name__ == "__main__":  # si el nombre del script que se esta ejecutando es main realiza lo siguiente
     
