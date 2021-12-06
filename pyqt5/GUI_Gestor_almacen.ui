@@ -490,19 +490,6 @@
      <string>Modelo</string>
     </property>
    </widget>
-   <widget class="QTextEdit" name="ctrl_modelo">
-    <property name="geometry">
-     <rect>
-      <x>370</x>
-      <y>460</y>
-      <width>201</width>
-      <height>51</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">color: rgb(0, 0, 0);</string>
-    </property>
-   </widget>
    <widget class="QLabel" name="txt_stock">
     <property name="geometry">
      <rect>
@@ -2397,6 +2384,19 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
       <y>290</y>
       <width>771</width>
       <height>631</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(0, 0, 0);</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="ctrl_modelo">
+    <property name="geometry">
+     <rect>
+      <x>370</x>
+      <y>460</y>
+      <width>181</width>
+      <height>51</height>
      </rect>
     </property>
     <property name="styleSheet">
