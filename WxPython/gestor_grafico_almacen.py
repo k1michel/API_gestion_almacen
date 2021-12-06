@@ -32,7 +32,7 @@ class interfaz(wx.Frame):
         #Variables
         self.n_pulsado_nuevo = 0
         self.n_pulsado_modificar = 0
-        self.ip_server = 'http://0.0.0.0:8000/'
+        self.ip_server = 'http://localhost:8000/'
         self.primer_ciclo_categorias = False
         self.nueva_list_categorias_antigua = []
         
