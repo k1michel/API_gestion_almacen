@@ -15,6 +15,17 @@ class Conexion:
         self.inventario = self.db['inventario']
         self.historial_precios = self.db['historial_precios']
     
+    def insertar_historial(self,dic_historial):
+        return self.historial_precios.insert(dic_historial)
+    
+    def mostrar_historial(self):
+        return [dict(historial) for historial in self.historial_precios.all()]
+
+    def eliminar_historial(self):
+        self.historial_precios.delete()
+        return
+
+
     def insertar_envios(self,dic_paquete):
         return self.envios.insert(dic_paquete)
     

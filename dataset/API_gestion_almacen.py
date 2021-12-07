@@ -101,6 +101,35 @@ def delete_categoria(borrar_categoria: Categoria_borrar):
     conexion.borrar_categoria(dict_borrar_categoria)
     return 'Borrada la categoria OK'
 
+@almacen.post("/historial_precios")
+def post_historial(Nuevo_historial: Datos):
+    dict_nuevo_historial = dict(
+        codigo = Nuevo_historial.codigo,
+        categoria = Nuevo_historial.categoria,
+        modelo = Nuevo_historial.modelo,
+        stock = Nuevo_historial.stock,
+        fecha = Nuevo_historial.fecha,
+        precio = Nuevo_historial.precio,
+        precio_min = Nuevo_historial.precio_min,
+        precio_max = Nuevo_historial.precio_max
+
+    )
+    conexion.insertar_historial(dict_nuevo_historial)
+    return 'Nuevo historial insertado en Historial de Precios'
+
+@almacen.get("/historial_precios")
+def get_historial():
+    return conexion.mostrar_historial()
+
+@almacen.delete("/historial_precios")
+def delete_historial():
+    conexion.eliminar_historial()
+    return 'Historial de precios eliminado OK'
+
+@almacen.get("/historial_precios_recibir")
+def get_recibir_historial():
+    return conexion.mostrar_historial()
+
 def generate_html_response():
     html_content = """
     <html>

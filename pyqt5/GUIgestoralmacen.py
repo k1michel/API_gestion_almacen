@@ -53,10 +53,10 @@ class gui_gestor_almacen(QMainWindow):
         #################################################
 
         ## TABLA DE RESULTADOS ##
-        self.tabla_resultado.setColumnCount(6)
+        self.tabla_resultado.setColumnCount(8)
         self.tabla_resultado.setRowCount(50)
-        self.tabla_resultado.setHorizontalHeaderLabels(['Codigo','Categoria','Modelo','Stock','Ultima Modificacion', 'Precio'])
-        self.tabla_resultado.horizontalHeader().setSectionResizeMode(90)
+        self.tabla_resultado.setHorizontalHeaderLabels(['Codigo','Categoria','Modelo','Stock','Ultima Modificacion', 'Precio','Precio min','Precio max'])
+        self.tabla_resultado.horizontalHeader().setSectionResizeMode(80)
         ####################################################
         
         ##BOTON MODIFICAR ##
@@ -73,10 +73,10 @@ class gui_gestor_almacen(QMainWindow):
         self.n_pulsado_modificar = 0
         self.primer_ciclo_categorias = False
         self.nueva_list_categorias_antigua = []
-        self.precio_min_definitivo = float
-        self.precio_max_definitivo = float
+        self.precio_min_calculado = float
+        self.precio_max_calculado = float
         self.precio_medio = float
-        self.historial_precios = []
+        
 
         ######################################################
     def enviar(self):
@@ -86,21 +86,20 @@ class gui_gestor_almacen(QMainWindow):
         respuesta_envio = requests.post('http://localhost:8000/envios', data=json.dumps(envio))
         #print(f'Respuesta del requests -> {respuesta_envio.json()}')
         #print(f'Envio -> {envio}')
-        self.busqueda_codigo = 'vacio_0000'
-        sleep(1)
+        #self.busqueda_codigo = 'vacio_0000'
         list_recibir_busqueda = requests.post('http://localhost:8000/envios_recibir')
         data_list_recibir_busqueda=list_recibir_busqueda.json()
         #print(data_list_recibir_busqueda)
-        if data_list_recibir_busqueda[0]['busc'] != 'vacio_0000':
-            self.dict_recibir_busqueda = data_list_recibir_busqueda[1]
-            self.ctrl_codigo.setText(self.dict_recibir_busqueda['codigo'])
-            self.ctrl_categoria.setText(self.dict_recibir_busqueda['categoria'])
-            self.ctrl_modelo.setText(self.dict_recibir_busqueda['modelo'])
-            self.ctrl_stock.setText(str(self.dict_recibir_busqueda['stock']))
-            self.ctrl_fecha.setText(self.dict_recibir_busqueda['fecha'])
-            self.ctrl_precio.setText(str(self.dict_recibir_busqueda['precio']))
-            self.ctrl_precio_min.setText(str(self.dict_recibir_busqueda['precio_min']))
-            self.ctrl_precio_max.setText(str(self.dict_recibir_busqueda['precio_max']))
+        #if data_list_recibir_busqueda[0]['busc'] != 'vacio_0000':
+        self.dict_recibir_busqueda = data_list_recibir_busqueda[1]
+        self.ctrl_codigo.setText(self.dict_recibir_busqueda['codigo'])
+        self.ctrl_categoria.setText(self.dict_recibir_busqueda['categoria'])
+        self.ctrl_modelo.setText(self.dict_recibir_busqueda['modelo'])
+        self.ctrl_stock.setText(str(self.dict_recibir_busqueda['stock']))
+        self.ctrl_fecha.setText(self.dict_recibir_busqueda['fecha'])
+        self.ctrl_precio.setText(str(self.dict_recibir_busqueda['precio']))
+        self.ctrl_precio_min.setText(str(self.dict_recibir_busqueda['precio_min']))
+        self.ctrl_precio_max.setText(str(self.dict_recibir_busqueda['precio_max']))
     def OnEnterPressedCodigo(self):
         self.busqueda_codigo = self.ctrl_buscar_codigo.text()
         print('Se ha introducido codigo para buscar',self.busqueda_codigo)
@@ -159,7 +158,7 @@ class gui_gestor_almacen(QMainWindow):
         }
         #print(f'Los datos seleccionados son: {self.data_categoria}')
         self.tabla_resultado.clear()
-        self.tabla_resultado.setHorizontalHeaderLabels(['Codigo','Categoria','Modelo','Stock','Ultima Modificacion', 'Precio','Precio min','Precio max'])
+        self.tabla_resultado.setHorizontalHeaderLabels(['Codigo','Categoria','Modelo','Stock','Ultima Modificacion','Precio','Precio min','Precio max'])
         for n, key in enumerate(self.data_categoria.keys()):
             for m, item in enumerate(self.data_categoria[key]):
                 self.tabla_resultado.setItem(m,n,QTableWidgetItem(item))
@@ -171,23 +170,28 @@ class gui_gestor_almacen(QMainWindow):
         fecha_hora_actual = ahora.strftime(formato)
         return fecha_hora_actual
         
-    def actualizar_precios_medio(self,dict_busqueda):
-        aux_precios = list
-        aux_precios = dict_busqueda['precio_min'].append(dict_busqueda['precio'])        
-        self.historial_precios.append(aux_precios)
-        self.precio_min_definitivo = min(self.historial_precios)
-        self.precio_max_definitivo = max(self.historial_precios)
+    def actualizar_precios_medio(self):
+        recibir_historial = requests.get('http://localhost:8000/historial_precios_recibir')
+        json_recibir_historial = recibir_historial.json()
+        list_json_historial = [dict(id_item) for id_item in json_recibir_historial]
+        list_historial = []
+        for i in range(0,len(list_json_historial)):
+            dict_list_json_historial = list_json_historial[i]
+            if self.busqueda_codigo == dict_list_json_historial['codigo']:
+                list_historial.append(dict_list_json_historial)
+        print(f'La lista de items del codigo {self.busqueda_codigo} es {list_historial}')
+        list_precios=[]
+        for h in range(0,len(list_historial)):
+            list_precios.append(list_historial[h]['precio'])
+        print(f'La lista de precios del codigo {self.busqueda_codigo} es {list_precios}')
+        self.precio_min_calculado = min(list_precios) if len(list_precios)>0 else list_historial[0]['precio']
+        self.precio_max_calculado = max(list_precios) if len(list_precios)>0 else list_historial[0]['precio']
+        
         suma=0
-        for s in range(0,len(self.historial_precios[0])):
-            suma = self.historial_precios[0][s] + suma
-        self.precio_medio = round(suma/len(aux_precio_min),2)
-           
-            
-
-         
-
-
-
+        for s in range(0,len(list_precios)):
+            suma = list_precios[s] + suma
+        self.precio_medio = round(suma/len(list_precios),2)
+        print(f'Para el codigo {self.buscar_codigo} tenemos los precios {list_precios}\nsiendo el min: {self.precio_min_calculado},\nel max: {self.precio_max_calculado}\ny el precio medio: {self.precio_medio}')       
 
     def OnClickedModificar(self):
         self.ctrl_mensaje.clear()
@@ -196,7 +200,7 @@ class gui_gestor_almacen(QMainWindow):
         if self.n_pulsado_modificar == 1:
 
             self.busqueda_codigo = self.ctrl_buscar_codigo.text()
-            print(f'Busqueda codigo -> {self.busqueda_codigo}\n')
+            #print(f'Busqueda codigo -> {self.busqueda_codigo}\n')
             self.enviar()
             id_modificar = {
                 "id_modificar": str(self.dict_recibir_busqueda['id'])
@@ -208,6 +212,7 @@ class gui_gestor_almacen(QMainWindow):
             self.ctrl_fecha.setText('Auto')
             self.ctrl_precio_min.setText('Auto')
             self.ctrl_precio_max.setText('Auto')
+            self.ctrl_mensaje.setText('Ahora puede modificar...')
         if self.n_pulsado_modificar == 2:
             fecha_now = self.fecha_actual()
             nuevo_item = {
@@ -216,30 +221,25 @@ class gui_gestor_almacen(QMainWindow):
                 'modelo': str(self.ctrl_modelo.text()),
                 'stock': str(self.ctrl_stock.text()),
                 'fecha': fecha_now,
-                'precio':str(self.ctrl_precio.text()),
-                'precio_min': None,
-                'precio_max': None
+                'precio':self.ctrl_precio.text(),
+                'precio_min': self.ctrl_precio_min.text(),
+                'precio_max': self.ctrl_precio_max.text()
                 }
-            requests.post('http://localhost:8000/inventario', data=json.dumps(nuevo_item))
-            self.enviar()
-            id_modificar = {
-                "id_modificar": str(self.dict_recibir_busqueda['id'])
-            }
-            self.actualizar_precios_medio(self.dict_recibir_busqueda)
+            respuesta_historial = requests.post('http://localhost:8000/historial_precios', data=json.dumps(nuevo_item))
+            self.actualizar_precios_medio()
             nuevo_item_actualizado = {
-                'codigo': str(self.dict_recibir_busqueda['codigo']),
-                'categoria': str(self.dict_recibir_busqueda['categoria']),
-                'modelo': str(self.dict_recibir_busqueda['modelo']),
-                'stock': str(self.dict_recibir_busqueda['stock']),
+                'codigo':str(self.ctrl_codigo.text()),
+                'categoria':str(self.ctrl_categoria.text()),
+                'modelo': str(self.ctrl_modelo.text()),
+                'stock': str(self.ctrl_stock.text()),
                 'fecha': fecha_now,
-                'precio':self.precio_medio,
-                'precio_min': self.precio_min_definitivo,
-                'precio_max': self.precio_max_definitivo
-            }
-            requests.post('http://localhost:8000/modificar', data= json.dumps(id_modificar))
-            respuesta_nuevo_item_actualizado = requests.post('http://localhost:8000/inventario', data=json.dumps(nuevo_item_actualizado))
+                'precio': self.precio_medio,
+                'precio_min': self.precio_min_calculado,
+                'precio_max': self.precio_max_calculado
+                }
+            respuesta_inventario = requests.post('http://localhost:8000/inventario', data=json.dumps(nuevo_item_actualizado))
             self.n_pulsado_modificar = 0
-            if str(respuesta_nuevo_item_actualizado) == '<Response [200]>':
+            if (str(respuesta_historial) == '<Response [200]>') and (str(respuesta_inventario) == '<Response [200]>'):
                 self.ctrl_mensaje.setText('Modificar OK')
                 self.ctrl_codigo.clear()
                 self.ctrl_categoria.clear()
@@ -249,8 +249,8 @@ class gui_gestor_almacen(QMainWindow):
                 self.ctrl_precio.clear()
                 self.ctrl_precio_min.clear()
                 self.ctrl_precio_max.clear()
-            else:
-                self.ctrl_mensaje.setText('Fallo server')
+            elif (str(respuesta_historial) != '<Response [200]>') and (str(respuesta_inventario) == '<Response [200]>'):
+                self.ctrl_mensaje.setText('Fallo server: insertado historial error')
                 self.ctrl_codigo.clear()
                 self.ctrl_categoria.clear()
                 self.ctrl_modelo.clear()
@@ -258,23 +258,33 @@ class gui_gestor_almacen(QMainWindow):
                 self.ctrl_fecha.clear()
                 self.ctrl_precio.clear()
                 self.ctrl_precio_min.clear()
-                self.ctrl_precio_max.clear()     
+                self.ctrl_precio_max.clear()
+            elif (str(respuesta_historial) == '<Response [200]>') and (str(respuesta_inventario) != '<Response [200]>'):
+                self.ctrl_mensaje.setText('Fallo server: insertado inventario error')
+                self.ctrl_codigo.clear()
+                self.ctrl_categoria.clear()
+                self.ctrl_modelo.clear()
+                self.ctrl_stock.clear()
+                self.ctrl_fecha.clear()
+                self.ctrl_precio.clear()
+                self.ctrl_precio_min.clear()
+                self.ctrl_precio_max.clear()  
     
     def OnClickedNuevo(self):        
         self.ctrl_mensaje.clear()
         self.n_pulsado_nuevo += 1 
         if self.n_pulsado_nuevo == 1:
             
-            self.ctrl_codigo.setText('-> Codigo nuevo...')
-            self.ctrl_categoria.setText('-> Categoria nuevo...')
-            self.ctrl_modelo.setText('-> Modelo nuevo...')
-            self.ctrl_stock.setText('-> Stock nuevo...')
+            self.ctrl_codigo.setText('-> Codigo...')
+            self.ctrl_categoria.setText('-> Categoria...')
+            self.ctrl_modelo.setText('-> Modelo...')
+            self.ctrl_stock.setText('-> Stock...')
             self.ctrl_fecha.setText('Auto')
-            self.ctrl_precio.setText('-> Precio nuevo...')
+            self.ctrl_precio.setText('-> Precio...')
             self.ctrl_precio_min.setText('Auto')
             self.ctrl_precio_max.setText('Auto')
             print('Esperando datos para el envio...')
-
+            self.ctrl_mensaje.setText('Ahora puede rellenar el nuevo item...')
 
         if self.n_pulsado_nuevo == 2:
             fecha_now = self.fecha_actual()
@@ -285,15 +295,16 @@ class gui_gestor_almacen(QMainWindow):
                 'stock': str(self.ctrl_stock.text()),
                 'fecha': fecha_now,
                 'precio': round(float(self.ctrl_precio.text()),2),
-                'precio_min': [round(float(self.ctrl_precio.text()),2)],
-                'precio_max': [round(float(self.ctrl_precio.text()),2)]
+                'precio_min': round(float(self.ctrl_precio.text()),2),
+                'precio_max': round(float(self.ctrl_precio.text()),2)
 
             }
             respuesta_nuevo_item = requests.post('http://localhost:8000/inventario', data=json.dumps(nuevo_item))
+            respuesta_historial = requests.post('http://localhost:8000/historial_precios', data=json.dumps(nuevo_item))
             self.n_pulsado_nuevo = 0
             print('Nuevo item enviado a Inventario')
             
-            if str(respuesta_nuevo_item) == '<Response [200]>':
+            if (str(respuesta_nuevo_item) == '<Response [200]>') and (str(respuesta_historial) == '<Response [200]>'):
                 self.ctrl_mensaje.setText('Insertado nuevo OK')
                 self.ctrl_codigo.clear()
                 self.ctrl_categoria.clear()
