@@ -15,6 +15,7 @@ class gui_gestor_almacen(QMainWindow):
         ## LOGO ##
         pixmap = QPixmap('Letras_gestor_almacen_2.png')
         self.imagen_app.setPixmap(pixmap)
+        
         ##############################################
         ## RECOPILAR CATEGORIAS DEL INVENTARIO ##
         recibir_inventario = requests.get('http://localhost:8000/inventario_recibir')
@@ -41,6 +42,14 @@ class gui_gestor_almacen(QMainWindow):
         self.cbbox_categorias.addItems(self.list_categorias)
         self.cbbox_categorias.activated.connect(self.seleccion_categoria)
         #################################################        
+        
+        ## TOTAL INVERSEION ALMACEN
+        self.suma_total_almacen = 0.00
+        for t in range(1,len(list_dict_inventario)): 
+            self.suma_total_almacen = round(float(list_dict_inventario[t]['precio']) + self.suma_total_almacen,3)
+        self.ctrl_total_almacen.setText(str(self.suma_total_almacen) + ' €')
+
+        #################################################
         
         ## BUSCAR CODIGO ##
 
@@ -165,6 +174,11 @@ class gui_gestor_almacen(QMainWindow):
                 self.tabla_resultado.setItem(m,n,QTableWidgetItem(item))
         self.tabla_resultado.verticalHeader().setDefaultSectionSize(80)
         
+        self.suma_total_categoria = 0.00
+        for t in range(0,len(list_mostrar)): 
+            self.suma_total_categoria = round(float(list_mostrar[t]['precio']) + self.suma_total_categoria,3)
+        self.ctrl_total_categoria.setText(str(self.suma_total_categoria) + ' €')
+        self.ctrl_total_busqueda.clear()
     def fecha_actual(self):
         ahora = datetime.now()
         formato = "%Y-%m-%d_%H:%M:%S"
@@ -191,7 +205,7 @@ class gui_gestor_almacen(QMainWindow):
         suma=0
         for s in range(0,len(list_precios)):
             suma = list_precios[s] + suma
-        self.precio_medio = round(float(suma/len(list_precios)),2)
+        self.precio_medio = round(float(suma/len(list_precios)),3)
         print(f'Para el codigo {self.busqueda_codigo} tenemos los precios {list_precios}\nsiendo el min: {self.precio_min_calculado},\nel max: {self.precio_max_calculado}\ny el precio medio: {self.precio_medio}')       
 
     def OnClickedModificar(self):
@@ -226,7 +240,7 @@ class gui_gestor_almacen(QMainWindow):
                 'modelo': str(self.ctrl_modelo.text()),
                 'stock': int(self.ctrl_stock.text()),
                 'fecha': fecha_now,
-                'precio':round(float(self.ctrl_precio.text()),2),
+                'precio':round(float(self.ctrl_precio.text()),3),
                 'precio_min': 0.00,
                 'precio_max': 0.00
                 }
@@ -240,9 +254,9 @@ class gui_gestor_almacen(QMainWindow):
                 'modelo': str(self.ctrl_modelo.text()),
                 'stock': int(self.ctrl_stock.text()),
                 'fecha': fecha_now,
-                'precio': round(float(self.precio_medio),2),
-                'precio_min': round(float(self.precio_min_calculado),2),
-                'precio_max': round(float(self.precio_max_calculado),2)
+                'precio': round(float(self.precio_medio),3),
+                'precio_min': round(float(self.precio_min_calculado),3),
+                'precio_max': round(float(self.precio_max_calculado),3)
                 }
             
             respuesta_inventario = requests.post('http://localhost:8000/inventario', data=json.dumps(nuevo_item_actualizado))
@@ -277,7 +291,13 @@ class gui_gestor_almacen(QMainWindow):
                 self.ctrl_precio.clear()
                 self.ctrl_precio_min.clear()
                 self.ctrl_precio_max.clear()  
-    
+        recibir_inventario = requests.get('http://localhost:8000/inventario_recibir')
+        list_recibir_inventario = list(recibir_inventario.json())
+        list_dict_inventario = [dict(dict_inventario) for dict_inventario in list_recibir_inventario]
+        self.suma_total_almacen = 0.00
+        for t in range(1,len(list_dict_inventario)): 
+            self.suma_total_almacen = round(float(list_dict_inventario[t]['precio']) + self.suma_total_almacen,3)
+        self.ctrl_total_almacen.setText(str(self.suma_total_almacen) + ' €')
     def OnClickedNuevo(self):        
         self.ctrl_mensaje.clear()
         self.n_pulsado_nuevo += 1 
@@ -302,9 +322,9 @@ class gui_gestor_almacen(QMainWindow):
                 'modelo': str(self.ctrl_modelo.text()),
                 'stock': int(self.ctrl_stock.text()),
                 'fecha': fecha_now,
-                'precio': round(float(self.ctrl_precio.text()),2),
-                'precio_min': round(float(self.ctrl_precio.text()),2),
-                'precio_max': round(float(self.ctrl_precio.text()),2)
+                'precio': round(float(self.ctrl_precio.text()),3),
+                'precio_min': round(float(self.ctrl_precio.text()),3),
+                'precio_max': round(float(self.ctrl_precio.text()),3)
 
             }
             respuesta_nuevo_item = requests.post('http://localhost:8000/inventario', data=json.dumps(nuevo_item))
@@ -368,6 +388,10 @@ class gui_gestor_almacen(QMainWindow):
             self.list_categorias.sort()
             self.cbbox_categorias.addItems(list_categorias)
             self.nueva_list_categorias_antigua = nueva_list_categorias
+            self.suma_total_almacen = 0.00
+            for t in range(1,len(list_dict_inventario)): 
+                self.suma_total_almacen = round(float(list_dict_inventario[t]['precio']) + self.suma_total_almacen,3)
+            self.ctrl_total_almacen.setText(str(self.suma_total_almacen) + ' €')
 
     def OnPressed_Busqueda_modelo(self):
         busqueda_modelos = self.ctrl_busqueda_modelo.text()
@@ -434,7 +458,11 @@ class gui_gestor_almacen(QMainWindow):
                 #self.setItem(m, n, newitem)
                 self.tabla_resultado.setItem(m,n,QTableWidgetItem(item))
         self.tabla_resultado.verticalHeader().setDefaultSectionSize(80)
-
+        self.suma_total_busqueda = 0.00
+        for t in range(0,len(list_modelos)): 
+            self.suma_total_busqueda= round(float(list_modelos[t]['precio']) + self.suma_total_busqueda,3)
+        self.ctrl_total_busqueda.setText(str(self.suma_total_busqueda) + ' €')
+        self.ctrl_total_categoria.clear()
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     GUI = gui_gestor_almacen()
