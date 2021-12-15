@@ -7,6 +7,7 @@ from time import sleep
 import uvicorn
 from gestor_datos_almacen import Conexion
 from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
 
 class Datos(BaseModel):         
     codigo: str                     
@@ -29,7 +30,7 @@ class Categoria_borrar(BaseModel):
 
 
 almacen = FastAPI() 
-
+almacen.mount("/static_files", StaticFiles(directory="static_files"), name="static_files")
 conexion = Conexion()
 
 @almacen.post("/envios")
@@ -133,11 +134,21 @@ def generate_html_response():
     html_content = """
     <html>
         <head>
-            <title>GESTOR DE ALMACEN</title>
+            <title>
+                Gestor Almacen
+            </title>
         </head>
         <body>
-            <h1>BIENVENIDOS AL GESTOR DE ALMACEN</h1>
-            <h2>Todo esta correcto por aqui...<h2>
+            <header>
+                <div align="center">
+                    <img src="./static_files/Letras_gestor_almacen_2.png" width="400" height="100" alt="portada">
+                    <h1>BIENVENIDOS AL SERVIDOR</h1>
+                    <h3>Todo esta correcto por aqui...<h3>
+                </div>
+            </header>
+            <p style="text-align:center">
+                Servidor local con instancias de bases de datos para la gestion con sus clientes
+            </p>
         </body>
     </html>
     """
