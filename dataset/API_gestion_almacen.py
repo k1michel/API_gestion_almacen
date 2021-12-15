@@ -112,10 +112,9 @@ def post_historial(Nuevo_historial: Datos):
         precio = Nuevo_historial.precio,
         precio_min = Nuevo_historial.precio_min,
         precio_max = Nuevo_historial.precio_max
-
     )
     conexion.insertar_historial(dict_nuevo_historial)
-    return 'Nuevo historial insertado en Historial de Precios'
+    return 'Nuevo item insertado en Historial de Precios'
 
 @almacen.get("/historial_precios")
 def get_historial():
