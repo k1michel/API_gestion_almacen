@@ -76,6 +76,10 @@ class gui_gestor_almacen(QMainWindow):
         self.boton_nuevo.clicked.connect(self.OnClickedNuevo)
         #####################################################
 
+        ## BOTON BORRAR ##
+        self.boton_borrar.clicked.connect(self.OnClickedBorrar)
+        #####################################################
+
 
         ## VARIABLES AUXILIARES ##
         self.n_pulsado_nuevo = 0
@@ -218,11 +222,12 @@ class gui_gestor_almacen(QMainWindow):
             self.busqueda_codigo = self.ctrl_buscar_codigo.text()
             #print(f'Busqueda codigo -> {self.busqueda_codigo}\n')
             self.enviar()
-            id_modificar = {
-                "id_modificar": str(self.dict_recibir_busqueda['id'])
+            id_borrar = {
+                "id_borrar_item": str(self.dict_recibir_busqueda['id']),
+                "codigo_borrar_item": 'jkahsdfgjhñ'
             }
             #print(id_modificar)
-            requests.post('http://localhost:8000/modificar', data= json.dumps(id_modificar))
+            requests.post('http://localhost:8000/borrar_item', data= json.dumps(id_borrar))
             print('Esperando modificacion...')
             
             self.ctrl_fecha.setText('Auto')
@@ -463,6 +468,22 @@ class gui_gestor_almacen(QMainWindow):
             self.suma_total_busqueda= round(float(list_modelos[t]['precio']) + self.suma_total_busqueda,3)
         self.ctrl_total_busqueda.setText(str(self.suma_total_busqueda) + ' €')
         self.ctrl_total_categoria.clear()
+
+    def OnClickedBorrar(self):
+        self.busqueda_codigo = self.ctrl_buscar_codigo.text()
+        #print(f'Busqueda codigo -> {self.busqueda_codigo}\n')
+        self.enviar()
+        id_borrar = {
+            "id_borrar_item": str(self.dict_recibir_busqueda['id']),
+            "codigo_borrar_item": self.busqueda_codigo
+            }
+        requests.post('http://localhost:8000/borrar_item', data= json.dumps(id_borrar))
+        self.ctrl_mensaje.clear()
+        self.ctrl_mensaje.setText(f'Codigo {self.busqueda_codigo} eliminado OK')
+
+
+
+
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     GUI = gui_gestor_almacen()

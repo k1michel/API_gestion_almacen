@@ -22,8 +22,9 @@ class Datos(BaseModel):
 class Paquete(BaseModel):                             
     busc: str 
 
-class Modificado(BaseModel):
-    id_modificar : str
+class Borrado(BaseModel):
+    id_borrar_item : str
+    codigo_borrar_item: str
 
 class Categoria_borrar(BaseModel):
     categoria_delete : str
@@ -86,13 +87,14 @@ def delete_inventario():
 def get_recibir_inventario():
     return conexion.mostrar_inventario()
 
-@almacen.post("/modificar")
-def delete_modificar(modificado: Modificado):
-    dict_modificado = dict(
-        id_modificar = modificado.id_modificar
+@almacen.post("/borrar_item")
+def delete_borrar_item(borrado: Borrado):
+    dict_borrado = dict(
+        id_borrar_item = borrado.id_borrar_item,
+        codigo_borrar_item = borrado.codigo_borrar_item
     )
-    conexion.borrar_modificado(dict_modificado)
-    return 'Borrado de modificar OK'
+    conexion.borrado_item(dict_borrado)
+    return 'Borrado de item OK'
 
 @almacen.delete("/categoria_borrar")
 def delete_categoria(borrar_categoria: Categoria_borrar):

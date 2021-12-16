@@ -54,9 +54,11 @@ class Conexion:
         else:
             self.envios.insert(dict(encontrado))         
             
-    def borrar_modificado(self,dict_modificado):
-        id_borrar_modificado = dict_modificado['id_modificar']
-        self.inventario.delete(id=id_borrar_modificado)
+    def borrado_item(self,dict_borrado):
+        id_borrar_item = dict_borrado['id_borrar_item']
+        codigo_borrar_item = dict_borrado['codigo_borrar_item']
+        self.inventario.delete(id=id_borrar_item)
+        self.historial_precios.delete(codigo=codigo_borrar_item)
         return
     
     def borrar_categoria(self, dict_borrar_categoria):

@@ -635,7 +635,7 @@
    <widget class="QPushButton" name="boton_modificar">
     <property name="geometry">
      <rect>
-      <x>120</x>
+      <x>220</x>
       <y>650</y>
       <width>151</width>
       <height>41</height>
@@ -660,7 +660,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
    <widget class="QPushButton" name="boton_nuevo">
     <property name="geometry">
      <rect>
-      <x>320</x>
+      <x>30</x>
       <y>650</y>
       <width>151</width>
       <height>41</height>
@@ -3074,8 +3074,8 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
    <widget class="QPushButton" name="boton_borrar">
     <property name="geometry">
      <rect>
-      <x>220</x>
-      <y>720</y>
+      <x>410</x>
+      <y>650</y>
       <width>151</width>
       <height>41</height>
      </rect>
