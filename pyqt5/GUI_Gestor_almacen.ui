@@ -213,7 +213,7 @@
    <string>GestorAlmacen</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QLabel" name="imagen_app">
+   <widget class="QLabel" name="img_letras_logo">
     <property name="geometry">
      <rect>
       <x>690</x>
@@ -226,7 +226,7 @@
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap>../Letras_gestor_almacen_1.png</pixmap>
+     <pixmap>../Software/API_gestion_almacen/pyqt5/Letras_gestor_almacen_2.png</pixmap>
     </property>
     <property name="scaledContents">
      <bool>true</bool>
@@ -4555,6 +4555,100 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
      <string>BORRAR</string>
     </property>
    </widget>
+   <widget class="QLabel" name="img_fondo">
+    <property name="geometry">
+     <rect>
+      <x>-6</x>
+      <y>0</y>
+      <width>1931</width>
+      <height>1031</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="pixmap">
+     <pixmap>../Software/API_gestion_almacen/pyqt5/Fondo_gestor_almacen.png</pixmap>
+    </property>
+   </widget>
+   <zorder>img_fondo</zorder>
+   <zorder>img_letras_logo</zorder>
+   <zorder>txt_busqueda_modelo</zorder>
+   <zorder>ctrl_busqueda_modelo</zorder>
+   <zorder>txt_buscar_codigo</zorder>
+   <zorder>ctrl_buscar_codigo</zorder>
+   <zorder>line_2</zorder>
+   <zorder>txt_busqueda_titulo</zorder>
+   <zorder>txt_resultado_titulo</zorder>
+   <zorder>txt_codigo</zorder>
+   <zorder>ctrl_codigo</zorder>
+   <zorder>txt_categoria</zorder>
+   <zorder>ctrl_categoria</zorder>
+   <zorder>txt_modelo</zorder>
+   <zorder>txt_stock</zorder>
+   <zorder>ctrl_stock</zorder>
+   <zorder>txt_fecha</zorder>
+   <zorder>ctrl_fecha</zorder>
+   <zorder>txt_precio</zorder>
+   <zorder>ctrl_precio</zorder>
+   <zorder>ctrl_mensaje</zorder>
+   <zorder>txt_mensaje</zorder>
+   <zorder>boton_modificar</zorder>
+   <zorder>boton_nuevo</zorder>
+   <zorder>ctrl_precio_min</zorder>
+   <zorder>txt_precio_minimo</zorder>
+   <zorder>txt_precio_maximo</zorder>
+   <zorder>ctrl_precio_max</zorder>
+   <zorder>txt_categorias</zorder>
+   <zorder>cbbox_categorias</zorder>
+   <zorder>line_3</zorder>
+   <zorder>line_4</zorder>
+   <zorder>txt_listado</zorder>
+   <zorder>txt_clientes</zorder>
+   <zorder>line_5</zorder>
+   <zorder>txt_proveedores</zorder>
+   <zorder>line_6</zorder>
+   <zorder>tabla_resultado</zorder>
+   <zorder>ctrl_modelo</zorder>
+   <zorder>txt_total_almacen</zorder>
+   <zorder>ctrl_total_almacen</zorder>
+   <zorder>txt_total_categoria</zorder>
+   <zorder>ctrl_total_categoria</zorder>
+   <zorder>txt_total_busqueda</zorder>
+   <zorder>ctrl_total_busqueda</zorder>
+   <zorder>txt_cip_cliente</zorder>
+   <zorder>ctrl_cip_cliente</zorder>
+   <zorder>txt_empresa_cliente</zorder>
+   <zorder>txt_ubicacion_cliente</zorder>
+   <zorder>ctrl_empresa_cliente</zorder>
+   <zorder>ctrl_ubicacion_cliente</zorder>
+   <zorder>txt_telefono_cliente</zorder>
+   <zorder>ctrl_telefono_cliente</zorder>
+   <zorder>txt_email_cliente</zorder>
+   <zorder>ctrl_email_cliente</zorder>
+   <zorder>txt_proyecto_cliente</zorder>
+   <zorder>ctrl_proyecto_cliente</zorder>
+   <zorder>txt_cip_provedor</zorder>
+   <zorder>txt_proyecto_provedor</zorder>
+   <zorder>txt_email_provedor</zorder>
+   <zorder>ctrl_empresa_provedor</zorder>
+   <zorder>ctrl_email_provedor</zorder>
+   <zorder>ctrl_proyecto_provedor</zorder>
+   <zorder>ctrl_cip_provedor</zorder>
+   <zorder>ctrl_ubicacion_provedor</zorder>
+   <zorder>txt_telefono_provedor</zorder>
+   <zorder>txt_ubicacion_provedor</zorder>
+   <zorder>txt_empresa_provedor</zorder>
+   <zorder>ctrl_telefono_provedor</zorder>
+   <zorder>boton_asociar_cliente</zorder>
+   <zorder>boton_asociar_PROVEDOR</zorder>
+   <zorder>txt_cbbox_clientes</zorder>
+   <zorder>cbbox_clientes</zorder>
+   <zorder>line_7</zorder>
+   <zorder>txt_busqueda_titulo_2</zorder>
+   <zorder>cbbox_provedores</zorder>
+   <zorder>txt_cbbox_provedores</zorder>
+   <zorder>boton_borrar</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">

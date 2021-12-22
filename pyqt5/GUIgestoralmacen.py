@@ -14,7 +14,10 @@ class gui_gestor_almacen(QMainWindow):
         uic.loadUi("GUI_Gestor_almacen.ui",self)
         ## LOGO ##
         pixmap = QPixmap('Letras_gestor_almacen_2.png')
-        self.imagen_app.setPixmap(pixmap)
+        self.img_letras_logo.setPixmap(pixmap)
+        ## FONDO ##
+        pixmap = QPixmap('Fondo_gestor_almacen.png')
+        self.img_fondo.setPixmap(pixmap)
         
         ##############################################
         ## RECOPILAR CATEGORIAS DEL INVENTARIO ##
