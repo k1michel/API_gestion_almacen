@@ -219,7 +219,7 @@
       <x>690</x>
       <y>0</y>
       <width>591</width>
-      <height>121</height>
+      <height>101</height>
      </rect>
     </property>
     <property name="text">
@@ -353,7 +353,7 @@
      <enum>Qt::Horizontal</enum>
     </property>
    </widget>
-   <widget class="QLabel" name="txt_busqueda_titulo">
+   <widget class="QLabel" name="txt_busqueda_1">
     <property name="geometry">
      <rect>
       <x>230</x>
@@ -2916,7 +2916,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
    <widget class="QPushButton" name="boton_asociar_cliente">
     <property name="geometry">
      <rect>
-      <x>1570</x>
+      <x>1680</x>
       <y>480</y>
       <width>151</width>
       <height>41</height>
@@ -2941,7 +2941,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
    <widget class="QPushButton" name="boton_asociar_PROVEDOR">
     <property name="geometry">
      <rect>
-      <x>1570</x>
+      <x>1690</x>
       <y>820</y>
       <width>151</width>
       <height>41</height>
@@ -3013,7 +3013,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
      <enum>Qt::Horizontal</enum>
     </property>
    </widget>
-   <widget class="QLabel" name="txt_busqueda_titulo_2">
+   <widget class="QLabel" name="txt_busqueda_2">
     <property name="geometry">
      <rect>
       <x>1560</x>
@@ -4558,10 +4558,10 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
    <widget class="QLabel" name="img_fondo">
     <property name="geometry">
      <rect>
-      <x>-6</x>
+      <x>0</x>
       <y>0</y>
-      <width>1931</width>
-      <height>1031</height>
+      <width>1920</width>
+      <height>1080</height>
      </rect>
     </property>
     <property name="text">
@@ -4571,6 +4571,173 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
      <pixmap>../Software/API_gestion_almacen/pyqt5/Fondo_gestor_almacen.png</pixmap>
     </property>
    </widget>
+   <widget class="QLabel" name="txt_contacto_cliente">
+    <property name="geometry">
+     <rect>
+      <x>1390</x>
+      <y>470</y>
+      <width>81</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Comic Sans MS</family>
+      <pointsize>10</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>Contacto</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="ctrl_contacto_cliente">
+    <property name="geometry">
+     <rect>
+      <x>1390</x>
+      <y>500</y>
+      <width>221</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(0, 0, 0);</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="ctrl_contacto_provedores">
+    <property name="geometry">
+     <rect>
+      <x>1400</x>
+      <y>840</y>
+      <width>221</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(0, 0, 0);</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="txt_contacto_provedores">
+    <property name="geometry">
+     <rect>
+      <x>1400</x>
+      <y>810</y>
+      <width>81</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Comic Sans MS</family>
+      <pointsize>10</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>Contacto</string>
+    </property>
+   </widget>
+   <widget class="Line" name="line_8">
+    <property name="geometry">
+     <rect>
+      <x>810</x>
+      <y>140</y>
+      <width>341</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: qconicalgradient(cx:0, cy:0, angle:135, stop:0 rgba(255, 255, 0, 69), stop:0.375 rgba(255, 255, 0, 69), stop:0.423533 rgba(251, 255, 0, 145), stop:0.45 rgba(247, 255, 0, 208), stop:0.477581 rgba(255, 244, 71, 130), stop:0.518717 rgba(255, 218, 71, 130), stop:0.55 rgba(255, 255, 0, 255), stop:0.57754 rgba(255, 203, 0, 130), stop:0.625 rgba(255, 255, 0, 69), stop:1 rgba(255, 255, 0, 69));</string>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Horizontal</enum>
+    </property>
+   </widget>
+   <widget class="QLabel" name="txt_pedido">
+    <property name="geometry">
+     <rect>
+      <x>930</x>
+      <y>100</y>
+      <width>111</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Comic Sans MS</family>
+      <pointsize>16</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: qconicalgradient(cx:0, cy:0, angle:135, stop:0 rgba(255, 255, 0, 69), stop:0.375 rgba(255, 255, 0, 69), stop:0.423533 rgba(251, 255, 0, 145), stop:0.45 rgba(247, 255, 0, 208), stop:0.477581 rgba(255, 244, 71, 130), stop:0.518717 rgba(255, 218, 71, 130), stop:0.55 rgba(255, 255, 0, 255), stop:0.57754 rgba(255, 203, 0, 130), stop:0.625 rgba(255, 255, 0, 69), stop:1 rgba(255, 255, 0, 69));</string>
+    </property>
+    <property name="text">
+     <string>PEDIDO</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="boton_nuevo_pedido">
+    <property name="geometry">
+     <rect>
+      <x>810</x>
+      <y>170</y>
+      <width>151</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Comic Sans MS</family>
+      <pointsize>13</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: qconicalgradient(cx:0.5, cy:0.5, angle:293.3, stop:0 rgba(35, 40, 3, 255), stop:0.16 rgba(136, 106, 22, 255), stop:0.225 rgba(166, 140, 41, 255), stop:0.285 rgba(204, 181, 74, 255), stop:0.345 rgba(235, 219, 102, 255), stop:0.415 rgba(245, 236, 112, 255), stop:0.52 rgba(209, 190, 76, 255), stop:0.57 rgba(187, 156, 51, 255), stop:0.635 rgba(168, 142, 42, 255), stop:0.695 rgba(202, 174, 68, 255), stop:0.75 rgba(218, 202, 86, 255), stop:0.815 rgba(208, 187, 73, 255), stop:0.88 rgba(187, 156, 51, 255), stop:0.935 rgba(137, 108, 26, 255), stop:1 rgba(35, 40, 3, 255));
+background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(255, 255, 255, 255), stop:0.394737 rgba(0, 0, 0, 255), stop:0.721053 rgba(0, 0, 0, 255), stop:0.936842 rgba(255, 255, 255, 255), stop:1 rgba(0, 0, 0, 255));</string>
+    </property>
+    <property name="text">
+     <string>NUEVO</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="ctrl_codigo_pedido">
+    <property name="geometry">
+     <rect>
+      <x>980</x>
+      <y>190</y>
+      <width>151</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(0, 0, 0);</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="txt_codigo_pedido">
+    <property name="geometry">
+     <rect>
+      <x>1020</x>
+      <y>160</y>
+      <width>61</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Comic Sans MS</family>
+      <pointsize>10</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>Codigo</string>
+    </property>
+   </widget>
    <zorder>img_fondo</zorder>
    <zorder>img_letras_logo</zorder>
    <zorder>txt_busqueda_modelo</zorder>
@@ -4578,7 +4745,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
    <zorder>txt_buscar_codigo</zorder>
    <zorder>ctrl_buscar_codigo</zorder>
    <zorder>line_2</zorder>
-   <zorder>txt_busqueda_titulo</zorder>
+   <zorder>txt_busqueda_1</zorder>
    <zorder>txt_resultado_titulo</zorder>
    <zorder>txt_codigo</zorder>
    <zorder>ctrl_codigo</zorder>
@@ -4645,10 +4812,19 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
    <zorder>txt_cbbox_clientes</zorder>
    <zorder>cbbox_clientes</zorder>
    <zorder>line_7</zorder>
-   <zorder>txt_busqueda_titulo_2</zorder>
+   <zorder>txt_busqueda_2</zorder>
    <zorder>cbbox_provedores</zorder>
    <zorder>txt_cbbox_provedores</zorder>
    <zorder>boton_borrar</zorder>
+   <zorder>txt_contacto_cliente</zorder>
+   <zorder>ctrl_contacto_cliente</zorder>
+   <zorder>ctrl_contacto_provedores</zorder>
+   <zorder>txt_contacto_provedores</zorder>
+   <zorder>line_8</zorder>
+   <zorder>txt_pedido</zorder>
+   <zorder>boton_nuevo_pedido</zorder>
+   <zorder>ctrl_codigo_pedido</zorder>
+   <zorder>txt_codigo_pedido</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">

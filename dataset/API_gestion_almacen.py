@@ -29,10 +29,28 @@ class Borrado(BaseModel):
 class Categoria_borrar(BaseModel):
     categoria_delete : str
 
+class Clientes_provedores (BaseModel):
+    cip: str
+    empresa: str
+    ubicacion: str
+    telefono: str
+    email: str
+    proyecto: str
+    contacto: str
+
+class Pedido(BaseModel):
+    codigo: str
+    categoria: str
+    modelo: str
+    unidades: int
+    precio: float
+    fecha: str
 
 almacen = FastAPI() 
 almacen.mount("/static_files", StaticFiles(directory="static_files"), name="static_files")
 conexion = Conexion()
+
+### ENVIOS ###
 
 @almacen.post("/envios")
 def post_envios(paquete : Paquete):
@@ -43,6 +61,7 @@ def post_envios(paquete : Paquete):
     conexion.insertar_envios(dic_paquete)
     conexion.buscar_codigo_inventario()
     return 'Paquete recibido en Envios OK'
+
 @almacen.post("/envios_recibir")
 def post_recibir_envios():
     return conexion.mostrar_envios()
@@ -57,6 +76,7 @@ def delete_envios():
     conexion.eliminar_envios()
     return 'Eliminado completo Envios OK'
 
+### INVENTARIO ###
 
 @almacen.post("/inventario")
 def post_inventario(Nuevo_item: Datos):
@@ -104,6 +124,8 @@ def delete_categoria(borrar_categoria: Categoria_borrar):
     conexion.borrar_categoria(dict_borrar_categoria)
     return 'Borrada la categoria OK'
 
+### HISTORIAL PRECIOS ###
+
 @almacen.post("/historial_precios")
 def post_historial(Nuevo_historial: Datos):
     dict_nuevo_historial = dict(
@@ -131,6 +153,8 @@ def delete_historial():
 @almacen.get("/historial_precios_recibir")
 def get_recibir_historial():
     return conexion.mostrar_historial()
+
+### HOME API ###
 
 def generate_html_response():
     html_content = """
@@ -160,6 +184,8 @@ def generate_html_response():
 @almacen.get("/", response_class=HTMLResponse)
 async def home():
     return generate_html_response()
+
+### RUN API ###
 
 if __name__ == "__main__":  # si el nombre del script que se esta ejecutando es main realiza lo siguiente
     
