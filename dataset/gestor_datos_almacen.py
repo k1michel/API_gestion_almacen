@@ -57,7 +57,7 @@ class Conexion:
 
     ### PROVEDORES ###
 
-     def insertar_provedores(self,dict_provedores):
+    def insertar_provedores(self,dict_provedores):
         return self.provedores.insert(dict_provedores)
 
     def mostrar_provedores(self):
